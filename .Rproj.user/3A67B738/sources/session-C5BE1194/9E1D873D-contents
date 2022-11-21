@@ -1,0 +1,2 @@
+model1 <- readRDS("../../HIV_platform/Results_modelling1/HIVModelMainFit_20211022_110848.rds")
+incidence <- data.frame(year = model1$Year, model1 = model1$N_Inf_M)
