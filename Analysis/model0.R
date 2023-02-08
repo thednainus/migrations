@@ -43,10 +43,10 @@ theta <- c( age_assort_factor = .5 # power of age difference
   , srcMigrationRate = 1/50/365 # per lineage rate of migration to source
   , srcGrowthRate = 1 / 3 / 365 #
   , src0 = 1e3  # initial source size
-  , inc_scale = .03 # based on docking (see below) # initial = .03 # 0.09401734
-  , max_diag_rate =  1/3 # based on docking (see below) # initial = 1/3 (time 2 diag of 3 yrs) # 0.66227809
+  , inc_scale = 0.09401734 # based on docking (see below) # initial = .03 # 0.09401734
+  , max_diag_rate =  0.66227809 # based on docking (see below) # initial = 1/3 (time 2 diag of 3 yrs) # 0.66227809
   , diag_rate_85 = 1/10
-  , accel_diag_rate = 1/7 # based on docking (see below ) # initial = 1/7 # accel of logistic function # 0.03196171
+  , accel_diag_rate = 0.03196171 # based on docking (see below ) # initial = 1/7 # accel of logistic function # 0.03196171
   , treatmentEffectiveness = .95 # slows stage progression
   , pstarts
 	, age_rates
@@ -271,7 +271,7 @@ y0[m] <- theta['src0'] # initial source size
 #~ phillips incidence estimate -> scale so cuminf has about right value
 #~ make diagnosis rate linear from zero; tune so that 80pc diagnosed in present
 # incidence (t)
-phil_inc <- data.matrix( read.table( 'incidence.tsv') )[,1]
+phil_inc <- data.matrix( read.table( 'Analysis/incidence.tsv') )[,1]
 phil_inc_times <- seq( 1980, 2010, length.out = length(phil_inc))
 d_phil_inc_times <- phil_inc_times[2] - phil_inc_times[1]
 phil_inc.t <- approxfun( phil_inc_times, phil_inc, rule = 2 )
@@ -311,7 +311,7 @@ tr.t <- function(t){
 
 
 ##---- source C ----
-sourceCpp( 'model0.cpp' ) # F_matrix and G_matrix fns
+sourceCpp( 'Analysis/model0.cpp' ) # F_matrix and G_matrix fns
 
 dydt <- function(t,y, parms, ... ){
 	y <- pmax(y, 0 )
@@ -431,7 +431,7 @@ dydt <- function(t,y, parms, ... ){
 }
 
 ##---- dock model ----
-if (F)
+if (T)
 {
   #~ PHE: 15552 diagnosed msm in london in 2012
   propDiagnosed2012 <- 4/5

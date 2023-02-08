@@ -46,15 +46,17 @@ theta <- c(
   srcMigrationRate = 1/50/365, # per lineage rate of migration to source
   srcGrowthRate = 1/3/365, #
   src0 = 1e3,  # initial source size
-  inc_scale = 0.004276392, # incidence scale (inc_scale): based on docking (see below) # initial = .03 # 0.004276392
-  max_diag_rate =  0.586450596, # based on docking (see below) # initial = 1/3 (time 2 diag of 3 yrs) # 0.586450596
-  diag_rate_85 = 1/10,
-  accel_diag_rate = 0.261321728, # based on docking (see below ) # initial = 1/7 # accel of logistic function # 0.261321728
+  inc_scale = 1, #0.000446341  incidence scale (inc_scale): based on docking (see below) # initial = .03
+  max_diag_rate = 1.5,  #based on docking (see below) # initial = 1/3 (time 2 diag of 3 yrs)
+  #diag_rate_85 = 1/10,
+  diag_rate_85 = 0,
+  accel_diag_rate = 1.5, #0.459756850  based on docking (see below ) # initial = 1/7 # accel of logistic function
   treatmentEffectiveness = 0.95, # slows stage progression
   pstarts,
   age_rates,
   stageprog_rates
 )
+
 
 theta_default <- theta
 
@@ -88,16 +90,21 @@ risk_wtransm <- c(
 
 
 ## time axes & funcs
-time_res <-  52 * (2021.997 - 1980)  # time steps / week
+#time_res <-  52 * (2020.997 - 1980)  # time steps / week
+time_res <-  1 * (2020.997 - 1980)  # time steps / year
+#time_res <-  365 * (2020.997 - 1980)  # time steps / day
 year0 <- 1980
-year1 <- 2021.997
+year1 <- 2020.997
 date0 <- as.Date('1980-01-01')
 #date1 <- as.Date('2012-12-31')
-date1 <- as.Date('2021-12-31')
+date1 <- as.Date('2020-12-31')
 times0 <- 0
 times1 <- as.numeric( date1 - date0 )
 times_year <- seq(year0, year1, length.out = time_res) #to end of 2021
 times_day <- seq( 0, times1, length.out = time_res )
+
+
+
 days2years <- function( d ){
 	year0  + (year1 - year0) * d / (times1 - 0 )
 }
@@ -276,6 +283,7 @@ y0[m] <- theta['src0'] # initial source size
 # incidence (t)
 model1 <- readRDS("../../HIV_platform/Results_modelling1/HIVModelMainFit_20211022_110848.rds")
 incidence <- data.frame(year = model1$Year, model1 = model1$N_Inf_M)
+incidence <- incidence[1:16,]
 
 phil_inc <- incidence$model1
 
@@ -292,16 +300,31 @@ inc.t <- function(t, theta) {
 
 # diagnosis rates (t)
 #~ phe_diags_total <- c( 23, 	21, 	71, 	179, 	646, 	2938, 	2648, 	2385, 	1940, 	2169, 	2571, 	2847, 	2922, 	2835, 	2824, 	2931, 	2903, 	2865, 	2915, 	3267, 	3962, 	5139, 	6395, 	7409, 	7786, 	7928, 	7498, 	7388, 	7273, 	6676, 	6362, 	6219, 	6364 )
-diag.t <- function(t, theta){
+#diag.t <- function(t, theta){
 ## NOTE return val needs to be rate in units of event per day
-	y <- days2years( t)
-	mdr <- theta['max_diag_rate'] #per year
-	dr_accel <- theta['accel_diag_rate']
-	dr85 <- theta[ 'diag_rate_85' ] /365 #per day
-	if (y > 1985){
-		return( max( dr85,  mdr / ( 1 + exp(-(y-1985) * dr_accel) ) / 365 )   ) #per day
-	}
-	dr85
+#	y <- days2years( t)
+#	mdr <- theta['max_diag_rate'] #per year
+#	dr_accel <- theta['accel_diag_rate']
+#	dr85 <- theta[ 'diag_rate_85' ] /365 #per day
+#	if (y > 1985){
+#		return( max( dr85,  mdr / ( 1 + exp(-(y-1985) * dr_accel) ) / 365 )   ) #per day
+#	}
+#	dr85
+#}
+
+
+diag.t <- function(t, theta){
+  ## NOTE return val needs to be rate in units of event per day
+  y <- days2years(t)
+  #print(y)
+  #y <- t
+  mdr <- theta['max_diag_rate'] #per year
+  dr_accel <- theta['accel_diag_rate']
+  dr85 <- theta[ 'diag_rate_85' ] /365 #per day
+  if (y > 1985){
+    return( max( dr85,  mdr / ( 1 + exp(-(y-1985) * dr_accel) ) / 365 )   ) #per day
+  }
+  dr85
 }
 
 
@@ -322,6 +345,7 @@ tr.t <- function(t){
 sourceCpp( 'Analysis_SD/model0.cpp' ) # F_matrix and G_matrix fns
 
 dydt <- function(t, y, parms, ... ){
+  #browser()
 	y <- pmax(y, 0 )
 	incidence <- inc.t( t, theta )
 	care_rates <- c( diag.t( t, theta), tr.t( t) )
@@ -438,33 +462,71 @@ dydt <- function(t, y, parms, ... ){
 	list( .t, .F, .G, .Y )
 }
 
+di <- sapply( times_day, function(t) diag.t( t, theta ) )
+tr <- sapply( times_day, function(t) tr.t( t ) )
+inc <- sapply( times_day, function(t) inc.t( t , theta ) )
+plot( times_year, inc )
+plot( times_year, tr )
+plot( times_year, di )
 
-##---- dock model ----
-if (T)
-{
-  #~ PHE: 15552 diagnosed msm in london in 2012
+o <- ode(y=y0, times=times_day, func=dydt, parms=list()  , method = 'adams')
+tfgy <- .tfgy( o )
 
-  # For San Diego: "At the end of 2014, there were 9,719 MSM People Living
-  # With HIV or AIDS (PLWHIV) (prevalent cases)
-  propDiagnosed2014 <- 4/5
-  I2014 <- 9719  / propDiagnosed2014 # assuming 80pc diagnosed
-  #objfun based on both the above stats:
-  objfun <- function( lntheta0 )
-  {
-    theta[ names(lntheta0) ] <<- exp(lntheta0) # using globals..
-    o <- ode(y=y0, times=times_day, func=dydt, parms=list(), method = 'euler')
-    ifin <- sum( o[nrow(o), 2:(ncol(o)-1) ] )
-    idiagnosed <- sum( o[nrow(o), 1 + c( CARE_COORDS$care2, CARE_COORDS$care3) ] )
-    print(paste( ifin, idiagnosed ))
-    print( theta[fit_names ] )
-    ((ifin - I2014) / I2014)^2 + (idiagnosed/ifin - propDiagnosed2014)^2
-  }
-  fit_names <- c('inc_scale', 'max_diag_rate', 'accel_diag_rate')
-  theta_start <- log(theta[fit_names]) # default values
-  o <- optim( theta_start, objfun , control = list(trace=6, maxit=30) ) # 300
-  theta_docked <- exp(o$par)
-  print((o))
-}
+GG_care1_to_care2 <- lapply(tfgy[[3]], function(x) x[which(grepl(pattern = "care1",
+                                                                 x = rownames(x))),
+                                                     which(grepl(pattern = "care2",
+                                                                 x = colnames(x)))])
 
+GG_sum <- unlist(lapply(GG_care1_to_care2, function(x) sum(x)))
+
+
+
+new_diagnosis <- GG_sum
+new_diagnosis_year <- unlist(lapply(tfgy[[1]], function(x) days2years(x)))
+
+care2 <- data.frame(year = new_diagnosis_year, diagnosed = new_diagnosis)
+care2["only_year"] <- unlist(lapply(care2$year, function(x) strsplit(as.character(x), split = ".", fixed = TRUE)[[1]][1]))
+
+
+filename <- paste("param", line_number,
+                  "inc_scale", parameters$inc_scale,
+                  "max_diag_rate", parameters$max_diag_rate,
+                  "accel_diag_rate", parameters$accel_diag_rate,
+                  sep = "_")
+
+filename2 <- paste(filename, "rda", sep = ".")
+
+source(system.file("data/incidence_HIVdiagnosis.R", package = "HIVepisimAnalysis"))
+
+#new HIV diagnosis
+log_weights_dx <- compute_log_importance_weight_newDx(diag_obs = incidenceDiag$frequency,
+                                                      diag_sim = newDx_pop1_agg)
+#log_weights_dx_df <- data.frame(inc_scale = parameters$inc_scale,
+#                                max_diag_rate = parameters$max_diag_rate,
+#                                accel_diag_rate = parameters$accel_diag_rate,
+#                               y0_init = parameters$y0_init,
+#                                log_weights = log_weights_dx)
+
+log_weights_dx_df <- data.frame(inc_scale = parameters$inc_scale,
+                                max_diag_rate = parameters$max_diag_rate,
+                                accel_diag_rate = parameters$accel_diag_rate,
+                                diag_rate_85 = parameters$diag_rate_85,
+                                log_weights = log_weights_dx)
+
+log_weights_dx_df_all <- rbind(log_weights_dx_df_all, log_weights_dx_df)
+
+save(y0,
+     times_day,
+     dydt,
+     theta,
+     o,
+     tfgy,
+     new_diagnosis,
+     newDx_pop1_agg,
+     file = filename2)
+
+
+saveRDS(log_weights_dx_df_all,
+        paste("log_weights_dx_df_", line_number, ".RDS", sep = ""))
 
 

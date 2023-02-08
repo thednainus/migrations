@@ -11,13 +11,13 @@ message(seed)
 set.seed(seed)
 
 
-source('Analysis_SD/model0.R')
+source('Analysis_SD/model0_SD.R')
 
 
-MH <- 20 #10 # look up to 10 years in past for infector probs
-PID <- Sys.getpid()
+#MH <- 20 #10 # look up to 10 years in past for infector probs
+#PID <- Sys.getpid()
 #to ramdom select dates in the sampleTimes file
-TAXA_SIZE = 10
+TAXA_SIZE = 100
 
 # counterfactuals sim'ed separately, eg:
 #~ nh_wtransm <- c(
@@ -41,8 +41,8 @@ newinf <- sum(ffin[1:120, 1:120] ) * 365
 plwhiv <- sum( yfin[-length(yfin)] )
 
 #~  sample time and states
-sampleTimes <- scan( file = 'sampleTimes' )
-index <- sort(sample(x = 1:12164, size = TAXA_SIZE))
+sampleTimes <- scan( file = 'Analysis/sampleTimes' )
+index <- sort(sample(x = 1:12164, size = 10))
 # sampled sampleTimes
 ssampleTimes <- sampleTimes[index]
 
