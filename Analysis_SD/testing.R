@@ -12,6 +12,9 @@ best_runs6 <- list.files("fit/fit6", full.names = TRUE, pattern = "param")
 best_runs7 <- list.files("fit/fit7", full.names = TRUE, pattern = "param")
 best_runs8 <- list.files("fit/fit8", full.names = TRUE, pattern = "param")
 best_runs9 <- list.files("fit/fit9", full.names = TRUE, pattern = "param")
+best_runs10 <- list.files("fit/fit10", full.names = TRUE, pattern = "param")
+
+
 best_runs3_weeks <- list.files("fit/fit3_weeks", full.names = TRUE, pattern = "param")
 best_runs4_weeks <- list.files("fit/fit4_weeks", full.names = TRUE, pattern = "param")
 
@@ -21,7 +24,7 @@ best_runs4_weeks <- list.files("fit/fit4_weeks", full.names = TRUE, pattern = "p
 
 
 
-best_runs2 <- c(best_runs6, best_runs7, best_runs8, best_runs9)
+best_runs2 <- c(best_runs6, best_runs7, best_runs8, best_runs9, best_runs10)
 
 
 
@@ -37,10 +40,10 @@ for (i in 1:length(best_runs2)){
   new_diagnosis <- care2[c(6:41),3:2]
   new_diagnosis["param"] <- i
 
-  if(i > 7){
-    new_diagnosis <- newDx_pop1_agg[c(6:41),]
-    new_diagnosis["param"] <- i
-  }
+  #if(i > 7){
+  #  new_diagnosis <- newDx_pop1_agg[c(6:41),]
+  #  new_diagnosis["param"] <- i
+  #}
 
 
   all_best_runs <- rbind(all_best_runs, new_diagnosis)

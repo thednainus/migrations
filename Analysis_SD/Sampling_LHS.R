@@ -112,6 +112,17 @@ params4dim_v3 <- sampler_lhs(n = 10000,
 
 params4dim_v3$line_incidence <- round(params4dim_v3$line_incidence)
 
+#fit11 imperial college cluster
+#trying to determine the best number of points to use from incidence curve
+params4dim_v4 <- sampler_lhs(n = 10000,
+                             paramdf = data.frame(inc_scale = c(0.9, 2),
+                                                  max_diag_rate = c(0.1, 0.5),
+                                                  accel_diag_rate = c(0.01, 2),
+                                                  line_incidence = c(30, 41)
+                             ))
+
+params4dim_v4$line_incidence <- round(params4dim_v4$line_incidence)
+
 
 
 
@@ -126,4 +137,5 @@ saveRDS(params4dim_v2, "inst/data/params4dim_v2.RDS")
 saveRDS(params3dim_v5, "inst/data/params3dim_v5.RDS")
 saveRDS(params3dim_v6, "inst/data/params3dim_v6.RDS")
 saveRDS(params4dim_v3, "inst/data/params4dim_v3.RDS")
+saveRDS(params4dim_v4, "inst/data/params4dim_v4.RDS")
 
