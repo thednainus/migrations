@@ -1,5 +1,0 @@
-/rds/general/user/fferre15/ephemeral/SD_Benefits/model0/sim1/trees
-/rds/general/user/fferre15/ephemeral/SD_Benefits/model0/sim2/trees
-/rds/general/user/fferre15/ephemeral/SD_Benefits/model0/sim3/trees
-/rds/general/user/fferre15/ephemeral/SD_Benefits/model0/sim4/trees
-/rds/general/user/fferre15/ephemeral/SD_Benefits/model0/sim5/trees
