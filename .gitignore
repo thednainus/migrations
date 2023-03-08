@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+others/
+Analysis_SD/
+Analysis/
+fit/
+older/
+estimate_treedater.R
+

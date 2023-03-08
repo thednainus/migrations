@@ -431,7 +431,7 @@ dydt <- function(t,y, parms, ... ){
 }
 
 ##---- dock model ----
-if (T)
+if (F)
 {
   #~ PHE: 15552 diagnosed msm in london in 2012
   propDiagnosed2012 <- 4/5

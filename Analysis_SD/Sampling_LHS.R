@@ -1,13 +1,13 @@
 library(lhs)
 
-sampler_lhs <- function(n = 1000, paramdf){
+sampler_lhs <- function(n = 10000, paramdf){
 
   d = length(names(paramdf)) # number of dimension (the number of parameters that we will estimate)
   params <- randomLHS(n, d)
   params[,1] <- qunif(params[,1], min = paramdf[1,1], max = paramdf[2,1])
   params[,2] <- qunif(params[,2], min = paramdf[1,2], max = paramdf[2,2])
   params[,3] <- qunif(params[,3], min = paramdf[1,3], max = paramdf[2,3])
-  params[,4] <- qunif(params[,4], min = paramdf[1,4], max = paramdf[2,4])
+  #params[,4] <- qunif(params[,4], min = paramdf[1,4], max = paramdf[2,4])
   #params[,5] <- qunif(params[,5], min = paramdf[1,5], max = paramdf[2,5])
 
   params <- data.frame(params)
@@ -125,7 +125,14 @@ params4dim_v4$line_incidence <- round(params4dim_v4$line_incidence)
 
 
 
+#fit12 imperial college cluster
+#using all values for incidence and time resolution in weeks
 
+params3dim_weeks_v1 <- sampler_lhs(n = 10000,
+                             paramdf = data.frame(inc_scale = c(0.01, 0.2),
+                                                  max_diag_rate = c(0.01, 0.1),
+                                                  accel_diag_rate = c(0.1, 1.5)
+                             ))
 
 
 saveRDS(params3dim_v1, "inst/data/params3dim_v1.RDS")
@@ -138,4 +145,6 @@ saveRDS(params3dim_v5, "inst/data/params3dim_v5.RDS")
 saveRDS(params3dim_v6, "inst/data/params3dim_v6.RDS")
 saveRDS(params4dim_v3, "inst/data/params4dim_v3.RDS")
 saveRDS(params4dim_v4, "inst/data/params4dim_v4.RDS")
+saveRDS(params3dim_weeks_v1, "inst/data/params3dim_weeks_v1.RDS")
+
 

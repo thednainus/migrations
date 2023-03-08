@@ -106,7 +106,6 @@ NumericMatrix G_matrix( NumericVector sizes
 		recip = care_recip(i) - 1;
 		if (recip >=0){
 			G(i, recip) = sizes(i) * care_rates(care );
-//Rcout << "The value for care_rates is " << care_rates;
 		}
 	}
 

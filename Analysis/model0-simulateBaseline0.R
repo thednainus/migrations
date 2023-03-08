@@ -11,13 +11,13 @@ message(seed)
 set.seed(seed)
 
 
-source('model0.R')
+source('Analysis/model0.R')
 
 
 MH <- 20 #10 # look up to 10 years in past for infector probs
 PID <- Sys.getpid()
 #to ramdom select dates in the sampleTimes file
-TAXA_SIZE = 10
+TAXA_SIZE = 100
 
 # counterfactuals sim'ed separately, eg:
 #~ nh_wtransm <- c(
@@ -41,12 +41,12 @@ newinf <- sum(ffin[1:120, 1:120] ) * 365
 plwhiv <- sum( yfin[-length(yfin)] )
 
 #~  sample time and states
-sampleTimes <- scan( file = 'sampleTimes' )
+sampleTimes <- scan( file = 'Analysis/sampleTimes' )
 index <- sort(sample(x = 1:12164, size = TAXA_SIZE))
 # sampled sampleTimes
 ssampleTimes <- sampleTimes[index]
 
-ss  <- matrix( scan( file = 'sampleStates' ) , byrow=TRUE, ncol = m)
+ss  <- matrix( scan( file = 'Analysis/sampleStates' ) , byrow=TRUE, ncol = m)
 colnames(ss) <- DEMES
 # regularise
 ss <- ss + 1e-4
@@ -64,7 +64,8 @@ st.tree <- system.time( {
 print(date())
   }
 
-
+quartz()
+plot(daytree, show.tip.label = FALSE)
 
 
 # rescale tree
