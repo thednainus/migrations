@@ -6,7 +6,6 @@
 .gitignore
 .DS_Store
 others/
-Analysis_SD/
 Analysis/
 fit/
 older/
