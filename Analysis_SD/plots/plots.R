@@ -74,6 +74,10 @@ incidence["only_year"] <- unlist(lapply(incidence$year, function(x) strsplit(as.
 
 incidence$only_year <- as.numeric(incidence$only_year)
 
+inc_agg <- aggregate(incidence ~ only_year ,
+                            data = incidence,
+                            FUN=sum)
+
 
 incidence_ecdc <- readRDS(system.file("data/ECDC_incidence_model_22Oct2021.RDS",
                                  package = "HIVepisimAnalysis"))
@@ -81,13 +85,15 @@ incidence_ecdc <- readRDS(system.file("data/ECDC_incidence_model_22Oct2021.RDS",
 
 quartz()
 names(incidence_ecdc) <- c("only_year", "incidence")
-ggplot(incidence, aes(x=only_year)) +
+ggplot(inc_agg, aes(x=only_year)) +
   geom_line(aes(y = incidence, colour = "simulated data")) +
   geom_line(data = incidence_ecdc, aes(y = incidence, colour = "incidence ecdc"),
             linewidth = 0.8) +
   theme_bw() + ylab("Incidence") +
   theme(text = element_text(size=20), legend.position = "bottom") +
   theme(legend.title=element_blank())
+
+
 
 
 ## migrations to source compartment ----

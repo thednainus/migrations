@@ -279,18 +279,21 @@ y0[m] <- theta['src0'] # initial source size
 #~ make diagnosis rate linear from zero; tune so that 80pc diagnosed in present
 # incidence (t)
 #model1 <- readRDS("HIVModelMainFit_20211022_110848.rds")
-model1 <- readRDS(system.file("data/ECDC_incidence_model_22Oct2021.RDS", package = "HIVepisimAnalysis"))
-names(model1) <- c("Year", "N_Inf_M")
+incidence <- readRDS(system.file("data/ECDC_incidence_model_22Oct2021.RDS", package = "HIVepisimAnalysis"))
+names(incidence) <- c("Year", "N_Inf_M")
 
-phil_inc <- model1$N_Inf_M
+incidence.t <- approxfun( incidence$Year, incidence$N_Inf_M, rule = 2 )
 
-phil_inc_times <- model1$Year
-d_phil_inc_times <- phil_inc_times[2] - phil_inc_times[1]
-phil_inc.t <- approxfun( phil_inc_times, phil_inc, rule = 2 )
+#inc.t <- function(t, theta) {
+#  y <- days2years(t)
+#  i <- min(length(phil_inc), max(1, 1 + floor( (y - #phil_inc_times[1]) / d_phil_inc_times )) )
+#  phil_inc[i] * theta['inc_scale']
+#}
+
 inc.t <- function(t, theta) {
   y <- days2years(t)
-  i <- min(length(phil_inc), max(1, 1 + floor( (y - phil_inc_times[1]) / d_phil_inc_times )) )
-  phil_inc[i] * theta['inc_scale']
+  inc <- incidence.t(y)
+  inc * theta['inc_scale']
 }
 
 
