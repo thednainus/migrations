@@ -48,10 +48,10 @@ theta <- c(
   srcMigrationRate = 1/10/365, # per lineage rate of migration to source
   srcGrowthRate = 1/3/365, #
   src0 = 1e3,  # initial source size
-  inc_scale = 0.02754, #  based on best fit using LHS
-  max_diag_rate = 0.09891  , # based on best fit using LHS
+  inc_scale = 0.0189, #  based on best fit using LHS
+  max_diag_rate = 0.2664,  # based on best fit using LHS
   diag_rate_85 = 0,
-  accel_diag_rate = 1.26594 , #  based on best fit using LHS
+  accel_diag_rate = 0.1719, #  based on best fit using LHS
   treatmentEffectiveness = 0.95, # slows stage progression
   pstarts,
   age_rates,
@@ -274,10 +274,6 @@ y0[m] <- theta['src0'] # initial source size
 
 
 ##---- calibrating function ----
-#~ idea for hacking incidence and diagnosis rates(t)
-#~ phillips incidence estimate -> scale so cuminf has about right value
-#~ make diagnosis rate linear from zero; tune so that 80pc diagnosed in present
-# incidence (t)
 #model1 <- readRDS("HIVModelMainFit_20211022_110848.rds")
 incidence <- readRDS(system.file("data/ECDC_incidence_model_22Oct2021.RDS", package = "HIVepisimAnalysis"))
 names(incidence) <- c("Year", "N_Inf_M")

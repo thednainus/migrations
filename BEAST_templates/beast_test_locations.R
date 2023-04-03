@@ -3,7 +3,7 @@ library(phangorn)
 library(seqinr)
 library(stringr)
 
-tree_teste <- read.alignment("../Benefits/test_results/model0/sim1/trees/alignments/model0_ali_1000bp.fasta", format = "FASTA")
+tree_teste <- read.alignment("/Users/sofia/Desktop/Imperial/R_packages/SD_Benefits/Analysis_SD/simulations/alignments/teste_ali_1000bp.fasta", format = "FASTA")
 
 names_tip <- tree_teste$nam
 

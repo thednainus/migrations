@@ -1,5 +1,5 @@
-#proportion of infections attributable to src or "global"
-#which is the proportion of infections attributable to migrants
+#proportion of infections attributable to "src" or "global"
+#which is the same as proportion of infections attributable to migrants
 
 library(SDBenefits)
 
@@ -13,14 +13,13 @@ tfgy <- .tfgy( o )
 
 times_year <- unlist(lapply(tfgy[[1]], function(x) days2years(x)))
 
-src2region <- lapply(tfgy[[3]],
-                     function(x) round(x[121,1:120], 6)/round(sum(x[1:121,1:120]), 6))
-src2region_sum <- unlist(lapply(src2region, function(x) sum(x)))
+#tfgy[[3]] corresponds to migration matrix
+src2region <- unlist(lapply(tfgy[[3]],
+                     function(x) round(sum(x[121,1:120]), 6)/round(sum(x[1:121,1:120]), 6)))
 
 
 
+src2region_df <- data.frame(year = times_year, src2region = src2region)
 
-src2region_df <- data.frame()
-
-
+plot(src2region_df$year[-1], src2region_df$src2region[-1])
 

@@ -6,14 +6,12 @@ TAXA_SIZE_REGION = 10
 
 #total number of sequences that we will simulate for source (global
 #sequences)
-TAXA_SIZE_SRC = 50
+TAXA_SIZE_SRC = 5
 
 
 #sample DEMES (without source)
 #random select state of individuals that will be in the matrix as 1
-#ss_region <- sample_states(n_compartments = 120,
-#                           n_size = TAXA_SIZE_REGION,
-#                           compartment_names = DEMES[-121])
+
 ss_region <- sample_states(n_compartments = 120,
                             n_size = TAXA_SIZE_REGION,
                             compartment_names = DEMES[-121])
@@ -36,11 +34,11 @@ rownames(ss_src) <- tip_names_src
 
 
 #join the two matrix together
-ss <- rbind(ss_region, ss_src)#get index of matrix in which values == 1 to ge the tip names
+ss <- rbind(ss_region, ss_src)
 
 #regularise
 ss <- ss + 1e-4
-ss = sampleStates <- ss / rowSums(ss)
+ss = ss / rowSums(ss)
 
 
 #sample times in years and then convert to days

@@ -6,8 +6,8 @@ library(SDBenefits)
 #source('Analysis_SD/simulations/model0_SD_weeks.R')
 #source('Analysis_SD/simulations/model0_SD_sampleTimes_and_States.R')
 
-source('model0_SD_weeks.R')
-source('model0_SD_sampleTimes_and_States.R')
+source('Analysis_SD/simulations/model0_SD_weeks.R')
+source('Analysis_SD/simulations/model0_SD_sampleTimes_and_States.R')
 
 
 
@@ -43,7 +43,7 @@ tree$edge.length <- tree$edge.length / 365
 #plot(tree, show.tip.label = TRUE)
 #axisPhylo()
 
-save(daytree, tree, tfgy, st_days, ss, file = "trees.rda")
+save(daytree, tree, tfgy, st_days, ss, file = "Analysis_SD/simulations/trees.rda")
 
 tree_time <- data.frame(start = start_time, end = end_time)
 saveRDS(tree_time, "tree_time.RDS")

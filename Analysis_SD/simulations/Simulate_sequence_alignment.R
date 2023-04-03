@@ -19,28 +19,28 @@ Software <- "/Applications/Seq-Gen-1.3.4/source/seq-gen"
 
 
 # read tree in which branch lengths have been converted into years
-load("/Users/sofia/Desktop/Imperial/R_packages/Benefits/test_results/model0/sim1/trees/trees.rda")
+load("Analysis_SD/simulations/trees.rda")
 # convert tree topology into newick tree format
-write.tree(phy = tree, file = "tree_year.tree")
+write.tree(phy = tree, file = "Analysis_SD/simulations/tree_year.tree")
 
 #Create directory for sequence alignment
-if (!dir.exists("alignments")) {
-  dir.create("alignments")
+if (!dir.exists("Analysis_SD/simulations/alignments")) {
+  dir.create("Analysis_SD/simulations/alignments")
   }
 
-
+filename_prefix <- "teste"
 
 # simulate sequence alignment of 1000bp-
-  seq_filename1000 <- paste("alignments/", filename_prefix, "_ali_1000bp.fasta", sep = "")
-  seq_filename10000 <- paste("alignments/", filename_prefix, "_ali_10000bp.fasta", sep = "")
+  seq_filename1000 <- paste("/Users/sofia/Desktop/Imperial/R_packages/SD_Benefits/Analysis_SD/simulations/alignments/", filename_prefix, "_ali_1000bp.fasta", sep = "")
+  seq_filename10000 <- paste("/Users/sofia/Desktop/Imperial/R_packages/SD_Benefits/Analysis_SD/simulations/alignments/", filename_prefix, "_ali_10000bp.fasta", sep = "")
 
 
   # simulate sequence alignment using Seq-Gen
   #Simulate alignments of 1000 bp
-  args1 <- c("-mHKY", "-l1000", "-t8.75", "-f0.389,0.165,0.228,0.218", "-s0.0028", "-n1", "-of", "tree_year.tree")
+  args1 <- c("-mHKY", "-l1000", "-t8.75", "-f0.389,0.165,0.228,0.218", "-s0.0028", "-n1", "-of", "Analysis_SD/simulations/tree_year.tree")
   system2(command = Software, args = args1, stdout = seq_filename1000)
   #Simulate alignments of 10000 bp
-  args2 <- c("-mHKY", "-l10000", "-t8.75", "-f0.389,0.165,0.228,0.218", "-s0.0028", "-n1", "-of", "tree_year.tree")
+  args2 <- c("-mHKY", "-l10000", "-t8.75", "-f0.389,0.165,0.228,0.218", "-s0.0028", "-n1", "-of", "Analysis_SD/simulations/tree_year.tree")
   system2(command = Software, args = args2, stdout = seq_filename10000)
 
 

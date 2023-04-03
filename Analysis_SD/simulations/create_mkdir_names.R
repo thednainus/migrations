@@ -2,8 +2,7 @@
 
 ephemeral_dir <- "/rds/general/user/fferre15/ephemeral/SD_Benefits/model0"
 
-
-n_jobs <- 5
+n_jobs <- 100
 
 dirnames <- NULL
 

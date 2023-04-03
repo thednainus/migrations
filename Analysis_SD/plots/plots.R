@@ -61,6 +61,8 @@ ggplot(new_diagnosis, aes(x=only_year)) +
   theme(text = element_text(size=20), legend.position = "bottom") +
   theme(legend.title=element_blank())
 
+
+
 ## plotting incidence (new infections) ----
 
 

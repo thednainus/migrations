@@ -1,35 +1,26 @@
 library(phydynR)
 
+best_runs1_weeks <- list.files("fit/fit1_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs2_weeks <- list.files("fit/fit2_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs3_weeks <- list.files("fit/fit3_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs4_weeks <- list.files("fit/fit4_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs4_weeks <- best_runs4_weeks[1]
+best_runs5_weeks <- list.files("fit/fit5_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs5_weeks <- best_runs5_weeks[1]
+best_runs6_weeks <- list.files("fit/fit6_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs7_weeks <- list.files("fit/fit7_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs7_weeks <- best_runs7_weeks[1]
+best_runs8_weeks <- list.files("fit/fit8_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs8_weeks <- best_runs8_weeks[1]
+best_runs9_weeks <- list.files("fit/fit9_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs9_weeks <- best_runs9_weeks[1]
+best_runs11_weeks <- list.files("fit/fit11_weeks_v2", full.names = TRUE, pattern = "param")
+best_runs11_weeks <- best_runs11_weeks[1]
 
 
-
-best_runs1 <- list.files("fit/fit1", full.names = TRUE, pattern = "param")
-best_runs2 <- list.files("fit/fit2", full.names = TRUE, pattern = "param")
-best_runs3 <- list.files("fit/fit3", full.names = TRUE, pattern = "param")
-best_runs4 <- list.files("fit/fit4", full.names = TRUE, pattern = "param")
-#best_runs5 <- list.files("fit/fit5", full.names = TRUE, pattern = "param")
-best_runs6 <- list.files("fit/fit6", full.names = TRUE, pattern = "param")
-best_runs7 <- list.files("fit/fit7", full.names = TRUE, pattern = "param")
-best_runs8 <- list.files("fit/fit8", full.names = TRUE, pattern = "param")
-best_runs9 <- list.files("fit/fit9", full.names = TRUE, pattern = "param")
-best_runs10 <- list.files("fit/fit10", full.names = TRUE, pattern = "param")
-
-
-best_runs1_weeks <- list.files("fit/fit1_weeks", full.names = TRUE, pattern = "param")
-
-best_runs3_weeks <- list.files("fit/fit3_weeks", full.names = TRUE, pattern = "param")
-best_runs4_weeks <- list.files("fit/fit4_weeks", full.names = TRUE, pattern = "param")
-
-
-
-
-
-
-
-best_runs2 <- c(best_runs6, best_runs7, best_runs8, best_runs9, best_runs10)
-
-best_runs2 <- c(best_runs8, best_runs1_weeks)
-
+best_runs2 <- c(best_runs3_weeks, best_runs4_weeks, best_runs5_weeks, best_runs6_weeks,
+                best_runs7_weeks, best_runs8_weeks, best_runs9_weeks, best_runs11_weeks)
+best_runs2 <-c(best_runs8_weeks, best_runs9_weeks, best_runs11_weeks)
 
 all_best_runs <- data.frame()
 
@@ -38,7 +29,7 @@ for (i in 1:length(best_runs2)){
   #load("best_runs3/param_984_inc_scale_1.26621755970543e-05_max_diag_rate_0.00080434082739912_accel_diag_rate_15.1500348115712.rda")
   load(best_runs2[i])
 
-  if(i > 1){
+  if(i > 1 | i == 1){
 
     care2 <- aggregate(newDx_pop1  ~ only_year, data = care2, FUN=sum)
 
@@ -62,7 +53,7 @@ for (i in 1:length(best_runs2)){
 }
 
 
-
+all_best_runs <-new_diagnosis
 
 source(system.file("data/incidence_HIVdiagnosis.R", package = "HIVepisimAnalysis"))
 #incidence <- readRDS(system.file("data/ECDC_incidence_model_22Oct2021.RDS",
