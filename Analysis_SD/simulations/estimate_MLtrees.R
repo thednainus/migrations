@@ -20,7 +20,7 @@ seq_length <- paste(seqlength, "bp", sep = "")
 
 
 #to run iqtree
-Software <- "iqtree"
+Software <- "iqtree2"
 maxCPU <- as.numeric(get_params[2])
 
 
