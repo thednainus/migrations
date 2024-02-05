@@ -80,7 +80,7 @@
 #' @return Character string of runnable XML Individual XMLs for each starting
 #'    tree will be written to disk
 #' @export
-format_xml0 <- function(xmlfn , fastafn){
+format_xml_phydyn <- function(xmlfn , fastafn){
   library( ape )
 
   #~ 	Attributes to overwrite:
@@ -98,13 +98,13 @@ format_xml0 <- function(xmlfn , fastafn){
   datedata = .date_trait( sts )
 
   x = readLines( xmlfn )
-  xmlofn = gsub( xmlfn, pattern='TEMPLATE', replacement='' )
+  xmlofn = gsub(xmlfn, pattern = "_TEMPLATE", replacement = "")
 
-  xk1 = gsub( x, pattern = 'DATE_TRAIT', replacement = datedata )
-  xk2 = gsub( xk1, pattern='SEQUENCES', replacement = seqdata )
+  xk1 = gsub(x, pattern = "DATE_TRAIT", replacement = datedata)
+  xk2 = gsub(xk1, pattern = "SEQUENCES", replacement = seqdata)
 
+  filename <- tail(str_split(xmlofn, "/")[[1]], n = 1)
+  writeLines(xk2, con = filename)
+  invisible(xk2)
 
-  writeLines( xk2, con =  gsub( pattern = '\\.xml$', replacement = paste0('\\.',1,'\\.xml'), xmlofn ) )
-
-  invisible( xk2 )
 }
