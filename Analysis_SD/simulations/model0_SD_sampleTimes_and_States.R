@@ -1,12 +1,13 @@
 library(lubridate)
 library(SDBenefits)
 
+
 #total number of individuals that we will simulate for region
-TAXA_SIZE_REGION = 10
+TAXA_SIZE_REGION = 4000
 
 #total number of sequences that we will simulate for source (global
 #sequences)
-TAXA_SIZE_SRC = 5
+TAXA_SIZE_SRC = 100
 
 
 #sample DEMES (without source)
@@ -18,8 +19,8 @@ ss_region <- sample_states(n_compartments = 120,
 ss_region <- cbind(ss_region, src = 0)
 
 tip_names_region <- create_tip_names(ss_region, origin = "region")
-
 rownames(ss_region) <- tip_names_region
+
 
 #now add total number of individuals that we will simulate in the src
 #compartment
@@ -65,7 +66,7 @@ st_src <- runif(n = TAXA_SIZE_SRC, min = start_simulation_dec, max = end_date_de
 st <- c(st_region, st_src)
 
 
-rownames(ss) <- paste(rownames(ss), st, sep = "_")
+rownames(ss) <- paste("_", paste(rownames(ss), st, sep = "_"), sep = "")
 
 #convert sample times from year to days
 

@@ -22,7 +22,7 @@ Matrix with 0 and 1s. Value of 1 correspond to the sampled
 }
 \description{
 This function will take the total number of compartments (or demes) in the
-model and random select the total number of individuals in each compartment.
+model and random select the number of diagnosed individuals not on ART.
 }
 \examples{
 ss <- sample_states(3, 10, c("care1", "care2", "care3"))

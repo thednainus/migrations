@@ -90,14 +90,17 @@ risk_wtransm <- c(
 
 
 ## time axes & funcs
-time_res <-  52 * (2020.997 - 1980)  # time steps / week
+#time_res <-  52 * (2020.997 - 1980)  # time steps / week
+time_res <-  52 * (2021 - 1980)  # time steps / week
 year0 <- 1980
-year1 <- 2020.997
+#year1 <- 2020.997
+year1 <- 2021
 date0 <- as.Date('1980-01-01')
 date1 <- as.Date('2020-12-31')
 times0 <- 0
 times1 <- as.numeric( date1 - date0 )
-times_year <- seq(year0, year1, length.out = time_res) #to end of 2021
+#times_year <- seq(year0, year1, length.out = time_res) #to end of 2021
+times_year <- seq(year0, 2021, length.out = time_res) #to end of 2021
 times_day <- seq( 0, times1, length.out = time_res )
 
 
@@ -314,7 +317,7 @@ tr.t <- function(t){
   if ( y < 1995 ) return(0)
   ( 1 / ( 1 + exp(-(y - 2e3)/2)) ) /365
 }
-#~ ys <- 1990:2012
+#~ ys <- 1990:2020
 #~ plot( ys, 1 / ( 1 + exp(-(ys - 2e3)/5)) )
 
 

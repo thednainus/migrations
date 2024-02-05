@@ -7,12 +7,10 @@
 create_tip_names(demes_matrix, origin)
 }
 \arguments{
-\item{region_n}{teste}
-
-\item{exog_n}{teste}
+\item{demes_matrix}{teste}
 }
 \value{
-tesre
+teste
 }
 \description{
 teste

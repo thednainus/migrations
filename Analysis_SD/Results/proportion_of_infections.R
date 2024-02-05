@@ -23,3 +23,7 @@ src2region_df <- data.frame(year = times_year, src2region = src2region)
 
 plot(src2region_df$year[-1], src2region_df$src2region[-1])
 
+src_size <- unlist(lapply(tfgy[[4]],
+                          function(x) x[121]))
+src_size_df <- data.frame(year = times_year, src_size = src_size)
+plot(src_size_df$year, src_size_df$src_size)
