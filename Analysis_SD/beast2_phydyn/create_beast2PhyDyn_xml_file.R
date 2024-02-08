@@ -18,28 +18,35 @@ library(phydynbeast)
 # correct
 # f_linear <- function(t){
 #
-#   a1980 <-  10
-#   b1980 <-  9.88
-#   a2005 <- 10
+#   a1980 <-  -7.78
+#   b1980 <-  9.34
+#   a2005 <- -4.19
 #
-#   a1995 <-  -20
-#   b1995 <- 40
+#   a1995 <-  5.11
+#   b1995 <- 6.22
 #   #b2005 <- 10
 #
+#
 #   if(t >= 1980 & t < 1995){
-#     a1980 * t + b1980
+#     #a1980 * t + b1980
+#     print("t >= 1980 & t < 1995")
+#     max(0.0,a1980*t+b1980)
 #   } else if (t >= 1995 & t < 2005){
-#     #at+b
-#     #b1980 + (b1995 * t) + 1995 * (t - 1995)
-#     b1980 + (a1980 - a1995) * 1995.0 + a1995 * t
+#     print("t >= 1995 & t < 2005")
+#     #b1980 + (a1980 - a1995) * 1995.0 + a1995 * t
+#     max(0.0,b1980+(a1980-a1995)*1995.0+a1995*t)
 #   } else {
-#     (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t
+#     print("last")
+#     #(2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t
+#     max(0.0,(2005.0*(a1995-a2005))+b1980+(1995.0*(a1980-a1995))+a2005*t)
 #   }
 # }
 #
 # time <- seq(1980, 2020, by = 0.1)
+# f <- lapply(time, function(x) f_linear(x))
+#
 # quartz()
-# plot(time, unlist(f(time)), type = 'l', col = 'blue')
+# plot(time, unlist(f), type = 'l', col = 'blue')
 
 
 eqns <- list(confeqn( 'beta = if (t>=1980) then max(0.0, a1980*t + b1980) else if ((t>=1995) and (t!>2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)',
@@ -59,61 +66,61 @@ eqns <- list(confeqn( 'beta = if (t>=1980) then max(0.0, a1980*t + b1980) else i
 )
 parms <- list(
   confparm('a',
-           initial = -0.0024,
+           initial = 0.0001,
            prior = 'normal',
            operator = 'realrw',
-           lower = -Inf,
-           upper = Inf,
+           lower = -1,
+           upper = 1,
            mean = 0,
-           sigma = 40),
+           sigma = 0.0001),
   confparm('a1980',
-           initial = 0.005,
+           initial = 0.00003,
            prior = 'normal',
            operator = 'realrw',
-           lower = -Inf,
-           upper = Inf,
+           lower = -1, #it was -Inf
+           upper = 1,
            mean = 0,
-           sigma = 40),
+           sigma = 0.00001),
   confparm('a1995',
-           initial = -1.98,
+           initial = -0.00006,
            prior = 'normal',
            operator = 'realrw',
-           lower = -Inf,
-           upper = Inf,
+           lower = -1,
+           upper = 1,
            mean = 0,
            sigma = 40),
   confparm('a2005',
-           initial = 0.36,
+           initial = 0.00008,
            prior = 'normal',
            operator = 'realrw',
-           lower = -Inf,
-           upper = Inf,
+           lower = -1,
+           upper = 1,
            mean = 0,
-           sigma = 40),
+           sigma = 0.00001),
   confparm('b',
-           initial = 4.22,
-           prior = 'lognormal',
+           initial = 0.05,
+           prior = 'normal',
            operator = 'realrw',
            lower = 0,
-           upper = Inf,
-           M = log(5),
-           S = 1.0),
+           upper = 2,
+           mean = 0,
+           sigma = 1),
   confparm('b1980',
-           initial = 9.88,
-           prior = 'lognormal',
+           initial = 0.1,
+           prior = 'normal',
            operator = 'realrw',
            lower = 0,
-           upper = Inf,
-           M = log(5),
-           S = 1.0),
+           upper = 2,
+           mean = 0,
+           sigma = 1),
   confparm('b1995',
-           initial = 8.47,
-           prior = 'lognormal',
+           initial = 0.20,
+           prior = 'normal',
            operator = 'realrw',
            lower = 0,
-           upper = Inf,
-           M = log(5),
-           S = 1.0),
+           upper = 2,
+           mean = 0,
+           sigma = 1),
   confparm('gamma',
            initial = 1/5.06,
            estimate = FALSE),
@@ -139,7 +146,7 @@ parms <- list(
            operator = 'realrw',
            lower = 1,
            upper = 500,
-           mean = 1/10),
+           mean = 1/5),
 
   confparm('src',
            initial_condition_parameter = TRUE,
@@ -149,7 +156,7 @@ parms <- list(
            operator = 'realrw',
            lower = 1,
            upper = 1e5,
-           M = log(2e4),
+           M = log(1.5e3),
            S = 1/2),
 
   confparm('Tr',
@@ -159,8 +166,28 @@ parms <- list(
 )
 
 model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
-                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_mod.xml',
+                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_modt0.xml',
                        t0 = confparm( 't0', estimate = FALSE, initial = 1980),
+                       equations = eqns,
+                       parameters = parms,
+                       coalescent_approximation = 'QL',
+                       integrationSteps = 100,
+                       minP = 0.001,
+                       penaltyAgtY= 0,
+                       useStateName = TRUE,
+                       traj_log_file = 'simodel0-traj_linear.tsv',
+                       traj_log_frequency = 1000
+)
+
+model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
+                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_modt0.xml',
+                       t0parm = confparm(name ='t0', estimate = TRUE, initial = 1980,
+                                      prior = 'normal',
+                                      operator = 'realrw',
+                                      lower = 1970,
+                                      upper = 1990,
+                                      mean = 1980,
+                                      sigma = 1),
                        equations = eqns,
                        parameters = parms,
                        coalescent_approximation = 'QL',
