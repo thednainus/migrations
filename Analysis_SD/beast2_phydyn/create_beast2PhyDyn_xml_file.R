@@ -51,6 +51,9 @@ quartz()
 plot(time, unlist(f), type = 'l', col = 'blue')
 
 
+
+#adding equations to create a beast2 phydyn xml file using the R package
+#phydynbeast (https://github.com/emvolz/phydynbeast)
 eqns <- list(confeqn( 'beta = if (t>=1980) then max(0.0, a1980*t + b1980) else if ((t>=1995) and (t!>2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)',
                       type = 'definition'),
              confeqn( 'alpha = if ((t!>1995)) then 0.0 else max(0.0, a*t + b)',
