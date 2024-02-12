@@ -16,37 +16,39 @@ library(phydynbeast)
 
 #to plot the continous piecewise linear equations and check that they are
 # correct
-# f_linear <- function(t){
-#
-#   a1980 <-  -7.78
-#   b1980 <-  9.34
-#   a2005 <- -4.19
-#
-#   a1995 <-  5.11
-#   b1995 <- 6.22
-#   #b2005 <- 10
-#
-#
-#   if(t >= 1980 & t < 1995){
-#     #a1980 * t + b1980
-#     print("t >= 1980 & t < 1995")
-#     max(0.0,a1980*t+b1980)
-#   } else if (t >= 1995 & t < 2005){
-#     print("t >= 1995 & t < 2005")
-#     #b1980 + (a1980 - a1995) * 1995.0 + a1995 * t
-#     max(0.0,b1980+(a1980-a1995)*1995.0+a1995*t)
-#   } else {
-#     print("last")
-#     #(2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t
-#     max(0.0,(2005.0*(a1995-a2005))+b1980+(1995.0*(a1980-a1995))+a2005*t)
-#   }
-# }
-#
-# time <- seq(1980, 2020, by = 0.1)
-# f <- lapply(time, function(x) f_linear(x))
-#
-# quartz()
-# plot(time, unlist(f), type = 'l', col = 'blue')
+f_linear <- function(t){
+
+  #some values for the intercepts and slopes
+  a1980 <-  0.00003
+  b1980 <-  0.10
+
+  a2005 <- 0.00008
+
+  a1995 <-  -0.00006
+  b1995 <- 0.20
+  #b2005 <- 10
+
+
+  if(t >= 1980 & t < 1995){
+    #a1980 * t + b1980
+    print("t >= 1980 & t < 1995")
+    max(0.0,a1980*t+b1980)
+  } else if (t >= 1995 & t < 2005){
+    print("t >= 1995 & t < 2005")
+    #b1980 + (a1980 - a1995) * 1995.0 + a1995 * t
+    max(0.0,b1980+(a1980-a1995)*1995.0+a1995*t)
+  } else {
+    print("last")
+    #(2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t
+    max(0.0,(2005.0*(a1995-a2005))+b1980+(1995.0*(a1980-a1995))+a2005*t)
+  }
+}
+
+time <- seq(1980, 2020, by = 0.1)
+f <- lapply(time, function(x) f_linear(x))
+
+quartz()
+plot(time, unlist(f), type = 'l', col = 'blue')
 
 
 eqns <- list(confeqn( 'beta = if (t>=1980) then max(0.0, a1980*t + b1980) else if ((t>=1995) and (t!>2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)',
