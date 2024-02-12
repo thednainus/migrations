@@ -1,10 +1,36 @@
 # defining upper and lower values for priors
+#ADD THE UPPER and LOWER bound too
 
-a1980 <- rnorm(50, 0, 0.001)
-b1980 <- rnorm(100, 0, 2)
-#b1980 <- rlnorm(100, 0, 0.5)
-#b1980 <- rnorm(50, 0, 0.5)
-time <- seq(1980, 1994, by = 0.5)
+
+a1980 <- rnorm(50, 0, 0.00001)
+b1980 <- rnorm(50, 0, 0.3)
+
+#first value of ELOWER and EUPPER is a1980 and second valu corresponds to b1980
+ELOWER <- c(-1, 0.001)
+EUPPER <- c(1, 2)
+
+beta1980param <- matrix(c(a1980, b1980), nrow = length(a1980), ncol = 2)
+
+get_priors <- function(beta1980param, UPPER, LOWER, n = 50){
+
+
+  for (i in 1:n){
+    beta1980param[i,] <- pmax( ELOWER, beta1980param[i,] )
+    beta1980param[i,] <- pmin( EUPPER, beta1980param[i,] )
+  }
+
+  return(beta1980param)
+}
+
+beta1980param_new <- get_priors(beta1980param,
+                                UPPER,
+                                LOWER,
+                                n = 50)
+
+times <- seq(1980, 1994, by = 0.5)
+
+a1980 <- beta1980param_new[,1]
+b1980 <- beta1980param_new[,2]
 
 total_linear_fun <- function(t, a1980, b1980){
 
@@ -17,23 +43,21 @@ total_linear_fun <- function(t, a1980, b1980){
 
 
 all_data <- data.frame()
-for( t in time){
+for( t in times){
 
   for (b in b1980){
 
     for (a in a1980)
 
       total_linear <- total_linear_fun(t,a,b)
-    all_data <- rbind(all_data, total_linear)
+      all_data <- rbind(all_data, total_linear)
 
   }
-
-
 }
 all_data["a_times_t"] <- all_data$time * all_data$a
-all_data["maxb2"] <- 2 - all_data$b
-all_data["beta1980"] <- unlist(lapply(all_data$value, function(x) max(0.0, x)))
-all_data["lt2"] <- all_data$value[all_data$value > 0 & all_data$value <= 2]
+#all_data["maxb2"] <- 2 - all_data$b
+#all_data["beta1980"] <- unlist(lapply(all_data$value, function(x) max(0.0, x)))
+all_data2 <- all_data[all_data$value < 0,]
 wrong_values <- subset(all_data, beta1980 == 0)
 
 
