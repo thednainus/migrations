@@ -62,10 +62,43 @@ wrong_values <- subset(all_data, beta1980 == 0)
 
 
 
-a1980 <- rnorm(25, 0, 40)
-b1980 <- rnorm(25, 0, 50)
-a1995 <- rnorm(10, 0, 40)
+#second linear function
+
+
+a1980 <- rnorm(50, 0, 0.00001)
+b1980 <- rnorm(50, 0, 0.3)
+a1995 <- rnorm(50, 0, 0.00001)
+
+
+#first value of ELOWER and EUPPER is a1980 and second valu corresponds to b1980
+ELOWER <- c(-1, 0.001, -1)
+EUPPER <- c(1, 2, 1)
+
+betaParam <- matrix(c(a1980, b1980, a1995), nrow = length(a1980), ncol = 3)
+
+get_priors <- function(betaParam, UPPER, LOWER, n = 50){
+
+
+  for (i in 1:n){
+    betaParam[i,] <- pmax( ELOWER, betaParam[i,] )
+    betaParam[i,] <- pmin( EUPPER, betaParam[i,] )
+  }
+
+  return(betaParam)
+}
+
+betaParam_new <- get_priors(betaParam,
+                                UPPER,
+                                LOWER,
+                                n = 50)
+
 time <- seq(1995, 2000, by = 0.5)
+
+a1980 <- betaParam_new[,1]
+b1980 <- betaParam_new[,2]
+a1995 <- betaParam_new[,3]
+
+
 
 all_data <- data.frame()
 total_linear_fun2 <- function(t, a1980, b1980, a1995){

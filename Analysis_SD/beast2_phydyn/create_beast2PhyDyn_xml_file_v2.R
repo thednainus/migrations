@@ -5,7 +5,7 @@ library(phydynbeast)
 # Tr = individuals who are receiving treatment
 # src = source compartment (comprising individuals from a global population)
 
-# beta = transmission rate as linear equation
+# beta = transmission rate as ??
 # alpha = the rate individuals start treatment also as a linear equation
 # srcGrowthRate = rate in which the src population grow
 # gamma = disease mortality rate
@@ -16,46 +16,21 @@ library(phydynbeast)
 
 #to plot the continous piecewise linear equations and check that they are
 # correct
-f_linear <- function(t){
-
-  #some values for the intercepts and slopes
-  a1980 <-  0.00003
-  b1980 <-  0.10
-
-  a2005 <- 0.00008
-
-  a1995 <-  -0.00006
-  b1995 <- 0.20
-  #b2005 <- 10
-
-
-  if(t >= 1980 & t < 1995){
-    #a1980 * t + b1980
-    print("t >= 1980 & t < 1995")
-    max(0.0,a1980*t+b1980)
-  } else if (t >= 1995 & t < 2005){
-    print("t >= 1995 & t < 2005")
-    #b1980 + (a1980 - a1995) * 1995.0 + a1995 * t
-    max(0.0,b1980+(a1980-a1995)*1995.0+a1995*t)
-  } else {
-    print("last")
-    #(2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t
-    max(0.0,(2005.0*(a1995-a2005))+b1980+(1995.0*(a1980-a1995))+a2005*t)
-  }
-}
-
-time <- seq(1980, 2020, by = 0.1)
-f <- lapply(time, function(x) f_linear(x))
-
-quartz()
-plot(time, unlist(f), type = 'l', col = 'blue')
-
-
 
 #adding equations to create a beast2 phydyn xml file using the R package
 #phydynbeast (https://github.com/emvolz/phydynbeast)
-eqns <- list(confeqn( 'beta = if (t>=1980) then max(0.0, a1980*t + b1980) else if ((t>=1995) and (t!>2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)',
+eqns <- list(confeqn( 'beta1 = if (t !> 1980) then 0.0 else (max (0.0, b1))',
                       type = 'definition'),
+             confeqn( 'betalb = if (t !> 1980 ) then 0.0 else if (t !>= 1995) then beta1 else if (t !>= 2005) then beta1 * exp( dlogbeta[0]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1])',
+                      type = 'definition'),
+             confeqn('betaub = if ( t !> 1980) then 0.0 else if (t !>= 1995) then beta1 * exp( dlogbeta[0] ) else if (t !>= 2005) then beta1 * exp( dlogbeta[0] + dlogbeta[1]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] ))',
+                     type = 'definition'),
+             confeqn('tlb  = if (t !> 1980 ) then 1980 else if (t !>= 1995) then 1980 else if (t !>= 2005) then 1995 else (T1)',
+                     type = 'definition'),
+             confeqn('propub = max(0, min(1, (t-tlb)/ (T1 - 2005)',
+                     type = 'definition'),
+             confeqn('beta = max(0, propub * betaub + (1-propub)*betalb)',
+                     type = 'definition'),
              confeqn( 'alpha = if ((t!>1995)) then 0.0 else max(0.0, a*t + b)',
                       type = 'definition'),
              confeqn( 'srcGrowthRate*src', type = 'birth',
@@ -78,30 +53,6 @@ parms <- list(
            upper = 1,
            mean = 0,
            sigma = 0.00001),
-  confparm('a1980',
-           initial = 0.00003,
-           prior = 'normal',
-           operator = 'realrw',
-           lower = -1, #it was -Inf
-           upper = 1,
-           mean = 0,
-           sigma = 0.00001),
-  confparm('a1995',
-           initial = -0.00006,
-           prior = 'normal',
-           operator = 'realrw',
-           lower = -1,
-           upper = 1,
-           mean = 0,
-           sigma = 40),
-  confparm('a2005',
-           initial = 0.00008,
-           prior = 'normal',
-           operator = 'realrw',
-           lower = -1,
-           upper = 1,
-           mean = 0,
-           sigma = 0.00001),
   confparm('b',
            initial = 0.05,
            prior = 'normal',
@@ -110,22 +61,22 @@ parms <- list(
            upper = 2,
            mean = 0,
            sigma = 0.3),
-  confparm('b1980',
-           initial = 0.1,
+  confparm('b1',
+           initial = 1,
            prior = 'normal',
            operator = 'realrw',
-           lower = 0.001,
+           lower = 0,
            upper = 2,
            mean = 0,
-           sigma = 1),
-  confparm('b1995',
-           initial = 0.20,
+           sigma = 2),
+  confparm('dlogbeta',
+           initial = 0,
            prior = 'normal',
            operator = 'realrw',
-           lower = 0.001,
-           upper = 2,
            mean = 0,
-           sigma = 1),
+           sigma = 1/2,
+           isVector=TRUE,
+           dimension='3'), #I don't know where I should add this
   confparm('gamma',
            initial = 1/5.06,
            estimate = FALSE),
@@ -170,29 +121,29 @@ parms <- list(
            estimate = FALSE)
 )
 
-model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
-                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_modt0.xml',
-                       t0 = confparm( 't0', estimate = FALSE, initial = 1980),
-                       equations = eqns,
-                       parameters = parms,
-                       coalescent_approximation = 'QL',
-                       integrationSteps = 100,
-                       minP = 0.001,
-                       penaltyAgtY= 0,
-                       useStateName = TRUE,
-                       traj_log_file = 'simodel0-traj_linear.tsv',
-                       traj_log_frequency = 1000
-)
+# model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
+#                        saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_modt0.xml',
+#                        t0parm = confparm(name ='t0', estimate = TRUE, initial = 1980,
+#                                       prior = 'normal',
+#                                       operator = 'realrw',
+#                                       lower = 1970,
+#                                       upper = 1990,
+#                                       mean = 1980,
+#                                       sigma = 1),
+#                        equations = eqns,
+#                        parameters = parms,
+#                        coalescent_approximation = 'QL',
+#                        integrationSteps = 100,
+#                        minP = 0.001,
+#                        penaltyAgtY= 0,
+#                        useStateName = TRUE,
+#                        traj_log_file = 'simodel0-traj_linear.tsv',
+#                        traj_log_frequency = 1000
+# )
 
 model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
-                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_modt0.xml',
-                       t0parm = confparm(name ='t0', estimate = TRUE, initial = 1980,
-                                      prior = 'normal',
-                                      operator = 'realrw',
-                                      lower = 1970,
-                                      upper = 1990,
-                                      mean = 1980,
-                                      sigma = 1),
+                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_v2.xml',
+                       t0parm = confparm(name ='t0', estimate = FALSE, initial = 1977),
                        equations = eqns,
                        parameters = parms,
                        coalescent_approximation = 'QL',

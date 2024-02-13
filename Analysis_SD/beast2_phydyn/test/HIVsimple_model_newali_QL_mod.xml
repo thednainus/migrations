@@ -250,7 +250,7 @@
               </param>
               <param id="modelParams.phydyn.srcMigrationRate" spec="phydyn.model.ParamValue" pname="srcMigrationRate" pvalue="@phydyn.srcMigrationRate"/>
             </modelParams>
-            <definition id="definition...c919299927b10cf9e78fbea19d9e7d36" spec="phydyn.model.Definition" value="beta = if (t&gt;=1980) then max(0.0, a1980*t + b1980) else if ((t&gt;=1995) and (t!&gt;2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)"/>
+            <definition id="definition...c919299927b10cf9e78fbea19d9e7d36" spec="phydyn.model.Definition" value="beta = if ((t&gt;=1980) and (t!&gt;1995)) then max(0.0, a1980*t + b1980) else if ((t&gt;=1995) and (t!&gt;2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)"/>
             <definition id="definition...c9d3fa5712bdcb64ba2931e1d2c6a8f2" spec="phydyn.model.Definition" value="alpha = if ((t!&gt;1995)) then 0.0 else max(0.0, a*t + b)"/>
             <matrixeq id="birth.src.src.b5f6f784630836c33751562304b114ea" spec="phydyn.model.MatrixEquation" type="birth" origin="src" destination="src">srcGrowthRate*src</matrixeq>
             <matrixeq id="birth.I.I.5246690718ea9d7d148b5807f032b5d8" spec="phydyn.model.MatrixEquation" type="birth" origin="I" destination="I">beta*I</matrixeq>

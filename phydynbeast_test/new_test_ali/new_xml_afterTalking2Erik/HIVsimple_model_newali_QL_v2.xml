@@ -303,12 +303,9 @@
       <parameter id="ORCsigma.c:model0_ali_1000bp_sim1" spec="parameter.RealParameter" lower="0.0" name="stateNode">0.2</parameter>
       <parameter id="ORCRates.c:model0_ali_1000bp_sim1" spec="parameter.RealParameter" dimension="548" lower="1.0E-100" name="stateNode">0.5</parameter>
       <parameter id="phydyn.a" spec="parameter.RealParameter" name="stateNode" lower="-1" upper="1">1e-04</parameter>
-      <parameter id="phydyn.a1980" spec="parameter.RealParameter" name="stateNode" lower="-1" upper="1">3e-05</parameter>
-      <parameter id="phydyn.a1995" spec="parameter.RealParameter" name="stateNode" lower="-1" upper="1">-6e-05</parameter>
-      <parameter id="phydyn.a2005" spec="parameter.RealParameter" name="stateNode" lower="-1" upper="1">8e-05</parameter>
-      <parameter id="phydyn.b" spec="parameter.RealParameter" name="stateNode" lower="0" upper="2">0.05</parameter>
-      <parameter id="phydyn.b1980" spec="parameter.RealParameter" name="stateNode" lower="0" upper="2">0.1</parameter>
-      <parameter id="phydyn.b1995" spec="parameter.RealParameter" name="stateNode" lower="0" upper="2">0.2</parameter>
+      <parameter id="phydyn.b" spec="parameter.RealParameter" name="stateNode" lower="0.001" upper="2">0.05</parameter>
+      <parameter id="phydyn.b1" spec="parameter.RealParameter" name="stateNode" lower="0" upper="2">1</parameter>
+      <parameter id="phydyn.dlogbeta" spec="parameter.RealParameter" dimension='3' name="stateNode" lower="-Infinity" upper="Infinity">0</parameter>
       <parameter id="phydyn.srcMigrationRate" spec="parameter.RealParameter" name="stateNode" lower="0.0416666666666667" upper="1">0.1</parameter>
       <parameter id="phydyn.I" spec="parameter.RealParameter" name="stateNode" lower="1" upper="500">1</parameter>
       <parameter id="phydyn.src" spec="parameter.RealParameter" name="stateNode" lower="1" upper="1e+05">10000</parameter>
@@ -355,16 +352,13 @@
               <initialValue id="initialValue.phydyn.Tr" spec="phydyn.model.ParamValue" pname="Tr">
                 <parameter id="phydyn.Tr" spec="parameter.RealParameter" estimate="false" name="pvalue" lower="0.0">0</parameter>
               </initialValue>
-              <parameter id="phydyn.t0" spec="parameter.RealParameter" name="t0" estimate="false">1980</parameter>
+              <parameter id="phydyn.t0" spec="parameter.RealParameter" name="t0" estimate="false">1977</parameter>
             </popParams>
             <modelParams id="rates" spec="phydyn.model.ModelParameters">
               <param id="modelParams.phydyn.a" spec="phydyn.model.ParamValue" pname="a" pvalue="@phydyn.a"/>
-              <param id="modelParams.phydyn.a1980" spec="phydyn.model.ParamValue" pname="a1980" pvalue="@phydyn.a1980"/>
-              <param id="modelParams.phydyn.a1995" spec="phydyn.model.ParamValue" pname="a1995" pvalue="@phydyn.a1995"/>
-              <param id="modelParams.phydyn.a2005" spec="phydyn.model.ParamValue" pname="a2005" pvalue="@phydyn.a2005"/>
               <param id="modelParams.phydyn.b" spec="phydyn.model.ParamValue" pname="b" pvalue="@phydyn.b"/>
-              <param id="modelParams.phydyn.b1980" spec="phydyn.model.ParamValue" pname="b1980" pvalue="@phydyn.b1980"/>
-              <param id="modelParams.phydyn.b1995" spec="phydyn.model.ParamValue" pname="b1995" pvalue="@phydyn.b1995"/>
+              <param id="modelParams.phydyn.b1" spec="phydyn.model.ParamValue" pname="b1" pvalue="@phydyn.b1"/>
+              <param id="modelParams.phydyn.dlogbeta" isVector='true' spec="phydyn.model.ParamValue" pname="dlogbeta" pvalue="@phydyn.dlogbeta"/>
               <param id="modelParam.phydyn.gamma" spec="phydyn.model.ParamValue" pname="gamma">
                 <parameter id="phydyn.gamma" spec="parameter.RealParameter" estimate="false" name="pvalue">0.197628458498024</parameter>
               </param>
@@ -373,7 +367,12 @@
               </param>
               <param id="modelParams.phydyn.srcMigrationRate" spec="phydyn.model.ParamValue" pname="srcMigrationRate" pvalue="@phydyn.srcMigrationRate"/>
             </modelParams>
-            <definition id="definition...c919299927b10cf9e78fbea19d9e7d36" spec="phydyn.model.Definition" value="beta = if (t&gt;=1980) then max(0.0, a1980*t + b1980) else if ((t&gt;=1995) and (t!&gt;2005)) then max(0.0, b1980 + (a1980 - a1995) * 1995.0 + a1995 * t) else max(0.0, (2005.0 * (a1995 - a2005)) + b1980 + (1995.0 * (a1980 - a1995)) + a2005 * t)"/>
+            <definition id="definition...0b4baa2fc5db00ffb36faca57c6c3e76" spec="phydyn.model.Definition" value="beta1 = if (t !&gt; 1980) then 0.0 else (max (0.0, b1))"/>
+            <definition id="definition...8f6c83704b5b50c7a08fd8d2a48cf2b8" spec="phydyn.model.Definition" value="betalb = if (t !&gt; 1980 ) then 0.0 else if (t !&gt;= 1995) then beta1 else if (t !&gt;= 2005) then beta1 * exp( dlogbeta[0]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1])"/>
+            <definition id="definition...eaf0c222d2c6c44ff25075a8f5b73477" spec="phydyn.model.Definition" value="betaub = if ( t !&gt; 1980) then 0.0 else if (t !&gt;= 1995) then beta1 * exp( dlogbeta[0] ) else if (t !&gt;= 2005) then beta1 * exp( dlogbeta[0] + dlogbeta[1]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] ))"/>
+            <definition id="definition...47d70d0d27175de2d367469b68422d4b" spec="phydyn.model.Definition" value="tlb  = if (t !&gt; 1980 ) then 1980 else if (t !&gt;= 1995) then 1980 else if (t !&gt;= 2005) then 1995 else (T1)"/>
+            <definition id="definition...d90c95094e572c2169012239ce1a4daa" spec="phydyn.model.Definition" value="propub = max(0, min(1, (t-tlb)/ (T1 - 2005)"/>
+            <definition id="definition...a10bdcfaa0fabae4f922b06c4f200519" spec="phydyn.model.Definition" value="beta = max(0, propub * betaub + (1-propub)*betalb)"/>
             <definition id="definition...c9d3fa5712bdcb64ba2931e1d2c6a8f2" spec="phydyn.model.Definition" value="alpha = if ((t!&gt;1995)) then 0.0 else max(0.0, a*t + b)"/>
             <matrixeq id="birth.src.src.b5f6f784630836c33751562304b114ea" spec="phydyn.model.MatrixEquation" type="birth" origin="src" destination="src">srcGrowthRate*src</matrixeq>
             <matrixeq id="birth.I.I.5246690718ea9d7d148b5807f032b5d8" spec="phydyn.model.MatrixEquation" type="birth" origin="I" destination="I">beta*I</matrixeq>
@@ -386,43 +385,25 @@
         <prior x="@phydyn.a" name="distribution" id="phydyn.a.prior">
           <Normal name="distr" id="phydyn.a.prior.normal">
             <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.a.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.a.prior.normal.RealParameter.2">1e-04</parameter>
-          </Normal>
-        </prior>
-        <prior x="@phydyn.a1980" name="distribution" id="phydyn.a1980.prior">
-          <Normal name="distr" id="phydyn.a1980.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.a1980.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.a1980.prior.normal.RealParameter.2">1e-05</parameter>
-          </Normal>
-        </prior>
-        <prior x="@phydyn.a1995" name="distribution" id="phydyn.a1995.prior">
-          <Normal name="distr" id="phydyn.a1995.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.a1995.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.a1995.prior.normal.RealParameter.2">40</parameter>
-          </Normal>
-        </prior>
-        <prior x="@phydyn.a2005" name="distribution" id="phydyn.a2005.prior">
-          <Normal name="distr" id="phydyn.a2005.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.a2005.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.a2005.prior.normal.RealParameter.2">1e-05</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.a.prior.normal.RealParameter.2">1e-05</parameter>
           </Normal>
         </prior>
         <prior x="@phydyn.b" name="distribution" id="phydyn.b.prior">
           <Normal name="distr" id="phydyn.b.prior.normal">
             <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.b.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b.prior.normal.RealParameter.2">1</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b.prior.normal.RealParameter.2">0.3</parameter>
           </Normal>
         </prior>
-        <prior x="@phydyn.b1980" name="distribution" id="phydyn.b1980.prior">
-          <Normal name="distr" id="phydyn.b1980.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.b1980.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b1980.prior.normal.RealParameter.2">1</parameter>
+        <prior x="@phydyn.b1" name="distribution" id="phydyn.b1.prior">
+          <Normal name="distr" id="phydyn.b1.prior.normal">
+            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.b1.prior.normal.RealParameter.1">0</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b1.prior.normal.RealParameter.2">2</parameter>
           </Normal>
         </prior>
-        <prior x="@phydyn.b1995" name="distribution" id="phydyn.b1995.prior">
-          <Normal name="distr" id="phydyn.b1995.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.b1995.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b1995.prior.normal.RealParameter.2">1</parameter>
+        <prior x="@phydyn.dlogbeta" name="distribution" id="phydyn.dlogbeta.prior">
+          <Normal name="distr" id="phydyn.dlogbeta.prior.normal">
+            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.dlogbeta.prior.normal.RealParameter.1">0</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.dlogbeta.prior.normal.RealParameter.2">0.5</parameter>
           </Normal>
         </prior>
         <prior x="@phydyn.srcMigrationRate" name="distribution" id="phydyn.srcMigrationRate.prior">
@@ -441,12 +422,6 @@
             <parameter name="M" estimate="false" spec="parameter.RealParameter" id="phydyn.src.prior.lognormal.RealParameter.1">7.3132203870903</parameter>
             <parameter name="S" estimate="false" spec="parameter.RealParameter" id="phydyn.src.prior.lognormal.RealParameter.2">0.5</parameter>
           </LogNormal>
-        </prior>
-        <prior x="@phydyn.t0" name="distribution" id="phydyn.t0.prior">
-          <Normal name="distr" id="phydyn.t0.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.t0.prior.normal.RealParameter.1">1980</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.t0.prior.normal.RealParameter.2">1</parameter>
-          </Normal>
         </prior>
       </distribution>
       <distribution id="likelihood" spec="CompoundDistribution" useThreads="true">
@@ -551,12 +526,9 @@
       <log idref="ORCsigma.c:model0_ali_1000bp_sim1"/>
       <log id="ORCRatesStat.c:model0_ali_1000bp_sim1" spec="beast.base.evolution.RateStatistic" branchratemodel="@OptimisedRelaxedClock.c:model0_ali_1000bp_sim1" tree="@Tree.t:model0_ali_1000bp_sim1"/>
       <log idref="phydyn.a"/>
-      <log idref="phydyn.a1980"/>
-      <log idref="phydyn.a1995"/>
-      <log idref="phydyn.a2005"/>
       <log idref="phydyn.b"/>
-      <log idref="phydyn.b1980"/>
-      <log idref="phydyn.b1995"/>
+      <log idref="phydyn.b1"/>
+      <log idref="phydyn.dlogbeta"/>
       <log idref="phydyn.gamma"/>
       <log idref="phydyn.srcGrowthRate"/>
       <log idref="phydyn.srcMigrationRate"/>
@@ -570,12 +542,9 @@
       <log idref="likelihood"/>
       <log idref="prior"/>
       <log idref="phydyn.a"/>
-      <log idref="phydyn.a1980"/>
-      <log idref="phydyn.a1995"/>
-      <log idref="phydyn.a2005"/>
       <log idref="phydyn.b"/>
-      <log idref="phydyn.b1980"/>
-      <log idref="phydyn.b1995"/>
+      <log idref="phydyn.b1"/>
+      <log idref="phydyn.dlogbeta"/>
       <log idref="phydyn.gamma"/>
       <log idref="phydyn.srcGrowthRate"/>
       <log idref="phydyn.srcMigrationRate"/>
@@ -589,16 +558,12 @@
     </logger>
     <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
     <operator id="phydyn.a.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a" windowSize="1e-05" weight="1" useGaussian="true"/>
-    <operator id="phydyn.a1980.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a1980" windowSize="3e-06" weight="1" useGaussian="true"/>
-    <operator id="phydyn.a1995.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a1995" windowSize="6e-06" weight="1" useGaussian="true"/>
-    <operator id="phydyn.a2005.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a2005" windowSize="8e-06" weight="1" useGaussian="true"/>
     <operator id="phydyn.b.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b" windowSize="0.005" weight="1" useGaussian="true"/>
-    <operator id="phydyn.b1980.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1980" windowSize="0.01" weight="1" useGaussian="true"/>
-    <operator id="phydyn.b1995.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1995" windowSize="0.02" weight="1" useGaussian="true"/>
+    <operator id="phydyn.b1.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1" windowSize="0.1" weight="1" useGaussian="true"/>
+    <operator id="phydyn.dlogbeta.operator" spec="RealRandomWalkOperator" parameter="@phydyn.dlogbeta" windowSize="1" weight="1" useGaussian="true"/>
     <operator id="phydyn.srcMigrationRate.operator" spec="RealRandomWalkOperator" parameter="@phydyn.srcMigrationRate" windowSize="0.01" weight="1" useGaussian="true"/>
     <operator id="phydyn.I.operator" spec="RealRandomWalkOperator" parameter="@phydyn.I" windowSize="0.1" weight="1" useGaussian="true"/>
     <operator id="phydyn.src.operator" spec="RealRandomWalkOperator" parameter="@phydyn.src" windowSize="1000" weight="1" useGaussian="true"/>
-    <operator id="phydyn.t0.operator" spec="RealRandomWalkOperator" parameter="@phydyn.t0" windowSize="198" weight="1" useGaussian="true"/>
     <logger id="popTrajLog" spec="Logger" fileName="simodel0-traj_linear.tsv" logEvery="1000">
       <log id="trajectoryLogger" spec="phydyn.loggers.TrajectoryLogger" pointFrequency="1" logrates="all" popModel="@PhyDynPopModel"/>
     </logger>
