@@ -1,4 +1,5 @@
 library(phydynbeast)
+library(lubridate)
 
 # Simple HIV model with migration between region and src
 # I = infectious individuals in region
@@ -19,15 +20,39 @@ library(phydynbeast)
 
 #adding equations to create a beast2 phydyn xml file using the R package
 #phydynbeast (https://github.com/emvolz/phydynbeast)
-eqns <- list(confeqn( 'beta1 = if (t !> 1980) then 0.0 else (max (0.0, b1))',
+
+#time points
+#decimal_date(seq( as.Date( '1980-01-01'), as.Date('2020-01-01') , by = 2555))
+#1980.000 1986.995 1993.989 2000.984 2007.981 2014.975
+
+
+# <!--
+#   > decimal_date( seq( as.Date( '2020-02-01'), as.Date(Sys.time()) , by = 14) )
+# [1] 2020.085 2020.123 2020.161 2020.199 2020.238
+# -->
+#   tlb  = if (t  !>=  SEIJR_START ) then 2020.085
+#   else if ( t !>= 2020.161) then 2020.123
+#   else if ( t  !>= 2020.199) then 2020.161
+#   else if ( t  !>=  2020.238) then 2020.199
+#   else ( 2020.238 ) "/>
+#
+#   tlb  = if (t  !>=  1980 ) then 1980
+#   else if ( t !>= 1993.989) then 1986.995
+#   else if ( t  !>= 2000.984) then 1993.989
+#   else if ( t  !>=  2007.981) then 2000.984
+#   else ( 2014.975 ) "/>
+
+
+
+eqns <- list(confeqn( 'beta1 = if (t!>1980) then 0.0 else (max(0.0, b1))',
                       type = 'definition'),
-             confeqn( 'betalb = if (t !> 1980 ) then 0.0 else if (t !>= 1995) then beta1 else if (t !>= 2005) then beta1 * exp( dlogbeta[0]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1])',
+             confeqn( 'betalb = if (t!>1980 ) then 0.0 else if (t!>=1986.995) then beta1 else if (t!>=1993.989 ) then (beta1 * exp( dlogbeta[0])) else if (t!>=2000.984 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] )) else if (t!>=2007.981 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2])) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3]))',
                       type = 'definition'),
-             confeqn('betaub = if ( t !> 1980) then 0.0 else if (t !>= 1995) then beta1 * exp( dlogbeta[0] ) else if (t !>= 2005) then beta1 * exp( dlogbeta[0] + dlogbeta[1]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] ))',
+             confeqn('betaub = if (t!>1980 ) then 0.0 else if (t!>=1986.995) then (beta1 * exp( dlogbeta[0])) else if (t!>=1993.989) then (beta1 * exp( dlogbeta[0] + dlogbeta[1])) else if (t!>=2000.984 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2])) else if (t!>=2007.981 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3])) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3] + dlogbeta[4]))',
                      type = 'definition'),
-             confeqn('tlb  = if (t !> 1980 ) then 1980 else if (t !>= 1995) then 1980 else if (t !>= 2005) then 1995 else (T1)',
+             confeqn('tlb  = if (t!>=1980 ) then 1980 else if (t!>=1993.989) then (1986.995) else if (t!>=2000.984) then (1993.989) else if (t!>=2007.981) then (2000.984) else (2014.975) )',
                      type = 'definition'),
-             confeqn('propub = max(0, min(1, (t-tlb)/ (T1 - 2005)',
+             confeqn('propub = max(0, min(1, (t-tlb)/ (2014.975 - 2007.981)))',
                      type = 'definition'),
              confeqn('beta = max(0, propub * betaub + (1-propub)*betalb)',
                      type = 'definition'),
@@ -141,8 +166,8 @@ parms <- list(
 #                        traj_log_frequency = 1000
 # )
 
-model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
-                       saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_v2.xml',
+model <- config_phydyn(xmlfn = "test_ali/relxadClock_TEMPLATE.xml",
+                       saveto = 'phydynbeast_test/new_test_ali/new_xml_afterTalking2Erik/HIVsimple_model_newali_QL_relaxedClock_v2.xml',
                        t0parm = confparm(name ='t0', estimate = FALSE, initial = 1977),
                        equations = eqns,
                        parameters = parms,

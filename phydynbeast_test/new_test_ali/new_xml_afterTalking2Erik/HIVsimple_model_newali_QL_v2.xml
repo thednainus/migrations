@@ -305,7 +305,7 @@
       <parameter id="phydyn.a" spec="parameter.RealParameter" name="stateNode" lower="-1" upper="1">1e-04</parameter>
       <parameter id="phydyn.b" spec="parameter.RealParameter" name="stateNode" lower="0.001" upper="2">0.05</parameter>
       <parameter id="phydyn.b1" spec="parameter.RealParameter" name="stateNode" lower="0" upper="2">1</parameter>
-      <parameter id="phydyn.dlogbeta" spec="parameter.RealParameter" dimension='3' name="stateNode" lower="-Infinity" upper="Infinity">0</parameter>
+      <parameter id="phydyn.dlogbeta" dimension='5' spec="parameter.RealParameter" name="stateNode" lower="-Infinity" upper="Infinity">0</parameter>
       <parameter id="phydyn.srcMigrationRate" spec="parameter.RealParameter" name="stateNode" lower="0.0416666666666667" upper="1">0.1</parameter>
       <parameter id="phydyn.I" spec="parameter.RealParameter" name="stateNode" lower="1" upper="500">1</parameter>
       <parameter id="phydyn.src" spec="parameter.RealParameter" name="stateNode" lower="1" upper="1e+05">10000</parameter>
@@ -358,7 +358,7 @@
               <param id="modelParams.phydyn.a" spec="phydyn.model.ParamValue" pname="a" pvalue="@phydyn.a"/>
               <param id="modelParams.phydyn.b" spec="phydyn.model.ParamValue" pname="b" pvalue="@phydyn.b"/>
               <param id="modelParams.phydyn.b1" spec="phydyn.model.ParamValue" pname="b1" pvalue="@phydyn.b1"/>
-              <param id="modelParams.phydyn.dlogbeta" isVector='true' spec="phydyn.model.ParamValue" pname="dlogbeta" pvalue="@phydyn.dlogbeta"/>
+              <param id="modelParams.phydyn.dlogbeta" spec="phydyn.model.ParamValue" isVector='true' pname="dlogbeta" pvalue="@phydyn.dlogbeta"/>
               <param id="modelParam.phydyn.gamma" spec="phydyn.model.ParamValue" pname="gamma">
                 <parameter id="phydyn.gamma" spec="parameter.RealParameter" estimate="false" name="pvalue">0.197628458498024</parameter>
               </param>
@@ -368,10 +368,10 @@
               <param id="modelParams.phydyn.srcMigrationRate" spec="phydyn.model.ParamValue" pname="srcMigrationRate" pvalue="@phydyn.srcMigrationRate"/>
             </modelParams>
             <definition id="definition...0b4baa2fc5db00ffb36faca57c6c3e76" spec="phydyn.model.Definition" value="beta1 = if (t !&gt; 1980) then 0.0 else (max (0.0, b1))"/>
-            <definition id="definition...8f6c83704b5b50c7a08fd8d2a48cf2b8" spec="phydyn.model.Definition" value="betalb = if (t !&gt; 1980 ) then 0.0 else if (t !&gt;= 1995) then beta1 else if (t !&gt;= 2005) then beta1 * exp( dlogbeta[0]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1])"/>
-            <definition id="definition...eaf0c222d2c6c44ff25075a8f5b73477" spec="phydyn.model.Definition" value="betaub = if ( t !&gt; 1980) then 0.0 else if (t !&gt;= 1995) then beta1 * exp( dlogbeta[0] ) else if (t !&gt;= 2005) then beta1 * exp( dlogbeta[0] + dlogbeta[1]) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] ))"/>
-            <definition id="definition...47d70d0d27175de2d367469b68422d4b" spec="phydyn.model.Definition" value="tlb  = if (t !&gt; 1980 ) then 1980 else if (t !&gt;= 1995) then 1980 else if (t !&gt;= 2005) then 1995 else (T1)"/>
-            <definition id="definition...d90c95094e572c2169012239ce1a4daa" spec="phydyn.model.Definition" value="propub = max(0, min(1, (t-tlb)/ (T1 - 2005)"/>
+            <definition id="definition...83ee9ac01b81718641dbbe9ac4e057c8" spec="phydyn.model.Definition" value="betalb = if (t !&gt; 1980 ) then 0.0 else if (t !&gt;= 1986.995) then beta1 else if (t !&gt;= 1993.989 ) then (beta1 * exp( dlogbeta[0])) else if (t !&gt;= 2000.984 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] )) else if (t !&gt;= 2007.981 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2])) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3]))"/>
+            <definition id="definition...22fc2b560a275032fad67828cc4565f1" spec="phydyn.model.Definition" value="betaub = if (t !&gt; 1980 ) then 0.0 else if (t !&gt;= 1986.995) then (beta1 * exp( dlogbeta[0])) else if (t !&gt;= 1993.989 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1])) else if (t !&gt;= 2000.984 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2])) else if (t !&gt;= 2007.981 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3])) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3] + dlogbeta[4]))"/>
+            <definition id="definition...bfb559b94d3a972ae2847f0eaae12972" spec="phydyn.model.Definition" value="tlb  = if (t  !&gt;=  1980 ) then 1980 else if ( t !&gt;= 1993.989) then (1986.995) else if ( t  !&gt;= 2000.984) then (1993.989) else if ( t  !&gt;=  2007.981) then (2000.984) else ( 2014.975 ) )"/>
+            <definition id="definition...1f357f4d709624a43f42a3e679014bee" spec="phydyn.model.Definition" value="propub = max(0, min(1, (t-tlb)/ (2014.975 - 2007.981)))"/>
             <definition id="definition...a10bdcfaa0fabae4f922b06c4f200519" spec="phydyn.model.Definition" value="beta = max(0, propub * betaub + (1-propub)*betalb)"/>
             <definition id="definition...c9d3fa5712bdcb64ba2931e1d2c6a8f2" spec="phydyn.model.Definition" value="alpha = if ((t!&gt;1995)) then 0.0 else max(0.0, a*t + b)"/>
             <matrixeq id="birth.src.src.b5f6f784630836c33751562304b114ea" spec="phydyn.model.MatrixEquation" type="birth" origin="src" destination="src">srcGrowthRate*src</matrixeq>
