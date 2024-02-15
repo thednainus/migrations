@@ -265,10 +265,7 @@
           </Normal>
         </prior>
         <prior x="@phydyn.b1" name="distribution" id="phydyn.b1.prior">
-          <Normal name="distr" id="phydyn.b1.prior.normal">
-            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.b1.prior.normal.RealParameter.1">0</parameter>
-            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b1.prior.normal.RealParameter.2">0.6</parameter>
-          </Normal>
+          <Uniform id="Uniform.1" name="distr" lower="0" upper="2"/>
         </prior>
         <prior x="@phydyn.dlogbeta" name="distribution" id="phydyn.dlogbeta.prior">
           <Normal name="distr" id="phydyn.dlogbeta.prior.normal">
