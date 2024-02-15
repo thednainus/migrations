@@ -1,11 +1,35 @@
 <beast version='2.7' namespace='phydyn.model:beast.base.util:beast.base.math:beast.base.evolution.alignment:beast.base.evolution.tree'>
 
   <model spec='PopModelODE' id='simpleHIVmodel' evaluator="compiled" popParams='@initValues' modelParams='@rates'>
-    <definition spec='Definition'>beta1 = if (t!&gt;1980) then 0.0 else (max (0.0, b1))</definition>
-    <definition spec='Definition'>betalb = if (t !&gt; 1980 ) then 0.0 else if (t !&gt;= 1986.995) then beta1 else if (t !&gt;= 1993.989 ) then (beta1 * exp( dlogbeta[0])) else if (t !&gt;= 2000.984 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] )) else if (t !&gt;= 2007.981 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] +dlogbeta[2])) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3]))</definition>
-    <definition spec='Definition'>betaub = if (t !&gt; 1980 ) then 0.0 else if (t !&gt;= 1986.995) then (beta1 * exp( dlogbeta[0])) else if (t !&gt;= 1993.989 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1])) else if (t !&gt;= 2000.984 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2])) else if (t !&gt;= 2007.981 ) then (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3])) else (beta1 * exp( dlogbeta[0] + dlogbeta[1] +  dlogbeta[2] + dlogbeta[3] + dlogbeta[4]))</definition>
-    <definition spec='Definition'>tlb  = if (t  !&gt;=  1980 ) then (1980) else if ( t !&gt;= 1993.989) then (1986.995) else if ( t  !&gt;= 2000.984) then (1993.989) else if ( t  !&gt;=  2007.981) then (2000.984) else ( 2014.975 ) )</definition>
-    <definition spec='Definition'>propub = max(0, min(1, (t-tlb)/ (2014.975 - 2007.981)))</definition>
+    <definition spec='Definition'>beta1 = if (t!>1980) then 0.0 else (max (0.0, b1))</definition>
+    <definition spec='Definition'>betalb = if ( t !>= 1980 ) then 0
+             else if (t  !>= 1985 ) then beta1
+             else if (t  !>= 1990 ) then beta1 * exp( dlogbeta[0] )
+             else if (t  !>= 1995 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] )
+             else if (t  !>= 2000 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] )
+             else if (t  !>= 2005 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] )
+             else if (t  !>= 2010 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] )
+             else if (t  !>= 2015 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] )
+                      else ( beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] + dlogbeta[6] ) )</definition>
+    <definition spec='Definition'>betaub = if ( t !>= 1980 ) then 0
+             else if (t  !>= 1985 ) then beta1 * exp( dlogbeta[0] )
+             else if (t  !>= 1990 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] )
+             else if (t  !>= 1995 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] )
+             else if (t  !>= 2000 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] )
+             else if (t  !>= 2005 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] )
+             else if (t  !>= 2010 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] )
+             else if (t  !>= 2015 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] + dlogbeta[6] )
+                     else ( beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] + dlogbeta[6] ) )</definition>
+    <definition spec='Definition'>tlb  = if (t!>= 1980 ) then 1980
+             else if (t  !>= 1990 ) then 1985
+             else if (t  !>= 1995 ) then 1990
+             else if (t  !>= 2000 ) then 1995
+             else if (t  !>= 2005 ) then 2000
+             else if (t  !>= 2010 ) then 2005
+             else if (t  !>= 2015 ) then 2010
+             else if (t  !>= 2020 ) then 2015
+                     else(2020)</definition>
+    <definition spec='Definition'>propub = max(0, min(1, (t-tlb)/(5)))</definition>
     <definition spec='Definition'>beta = max(0, propub * betaub + (1-propub)*betalb)</definition>
     <definition spec='Definition'>alpha = if ((t!&gt;1995)) then 0.0 else max(0.0, a*t + b)</definition>
 
@@ -19,9 +43,9 @@
 
   <rates spec="ModelParameters" id='rates'>
     <param spec='ParamValue' pname='a' pvalue='-0.000014'></param>
-    <param spec='ParamValue' pname='b' pvalue='0.8'></param>
-    <param spec='ParamValue' pname='b1' pvalue='1'></param>
-    <param spec='ParamValue' isVector = 'true' pname='dlogbeta' pvalue='0.35 0.08120636 0.04148637 0.51301205 -0.73336835'></param>
+    <param spec='ParamValue' pname='b' pvalue='0.3'></param>
+    <param spec='ParamValue' pname='b1' pvalue='0.8'></param>
+    <param spec='ParamValue' isVector = 'true' pname='dlogbeta' pvalue='0.0132647069 -0.0268174329 -0.0311379546  0.0067868598 -0.0003697739 -0.0161575075 0.0430043247'></param>
     <param spec='ParamValue' pname='gamma' pvalue='0.1976285'></param>
     <param spec='ParamValue' pname='srcMigrationRate' pvalue='0.1'></param>
     <param spec='ParamValue' pname='srcGrowthRate' pvalue='0.3333333'></param>

@@ -123,7 +123,7 @@ parms <- list(
            prior = 'normal',
            operator = 'realrw',
            mean = 0,
-           sigma = 1/2,
+           sigma = 0.05,
            isVector=TRUE,
            dimension='3'), #I don't know where I should add this
   confparm('gamma',

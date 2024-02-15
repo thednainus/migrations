@@ -11,7 +11,7 @@ fastafn <- list.files(path = ".", pattern = "*.fasta")
 #fastafn <- "test_ali/model0_ali_1000bp.fasta"
 
 #load xml TEMPLATE to run beast2 phydyn
-xmlfn <- system.file("xml_template/beast_phydyn_TEMPLATE.xml", package="SDBenefits")
+xmlfn <- system.file("xml_template/beast_phydyn_splines_TEMPLATE.xml", package="SDBenefits")
 
 #save xml file to disk
 format_xml_phydyn(xmlfn, fastafn)
