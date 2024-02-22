@@ -6,7 +6,7 @@ library(lubridate)
 # Tr = individuals who are receiving treatment
 # src = source compartment (comprising individuals from a global population)
 
-# beta = transmission rate as ??
+# beta = transmission rate as a spline function
 # alpha = the rate individuals start treatment also as a linear equation
 # srcGrowthRate = rate in which the src population grow
 # gamma = disease mortality rate
@@ -20,27 +20,6 @@ library(lubridate)
 
 #adding equations to create a beast2 phydyn xml file using the R package
 #phydynbeast (https://github.com/emvolz/phydynbeast)
-
-#time points
-#decimal_date(seq( as.Date( '1980-01-01'), as.Date('2020-01-01') , by = 3285))
-#1980.000 1988.992 1997.986 2006.981 2015.975
-
-
-# <!--
-#   > decimal_date( seq( as.Date( '2020-02-01'), as.Date(Sys.time()) , by = 14) )
-# [1] 2020.085 2020.123 2020.161 2020.199 2020.238
-# -->
-#   tlb  = if (t  !>=  SEIJR_START ) then 2020.085
-#   else if ( t !>= 2020.161) then 2020.123
-#   else if ( t  !>= 2020.199) then 2020.161
-#   else if ( t  !>=  2020.238) then 2020.199
-#   else ( 2020.238 ) "/>
-#
-#   tlb  = if (t  !>=  1980 ) then 1980
-#   else if ( t !>= 1997.986 ) then 1988.992
-#   else if ( t  !>= 2006.981) then 1997.986
-#   else if ( t  !>=  2015.975) then 2006.981
-#   else ( 2015.975 ) "/>
 
 
 
@@ -170,28 +149,9 @@ parms <- list(
            estimate = FALSE)
 )
 
-# model <- config_phydyn(xmlfn = "phydynbeast_test/region1000global100_template.xml",
-#                        saveto = 'phydynbeast_test/new_test_ali/HIVsimple_model_newali_QL_modt0.xml',
-#                        t0parm = confparm(name ='t0', estimate = TRUE, initial = 1980,
-#                                       prior = 'normal',
-#                                       operator = 'realrw',
-#                                       lower = 1970,
-#                                       upper = 1990,
-#                                       mean = 1980,
-#                                       sigma = 1),
-#                        equations = eqns,
-#                        parameters = parms,
-#                        coalescent_approximation = 'QL',
-#                        integrationSteps = 100,
-#                        minP = 0.001,
-#                        penaltyAgtY= 0,
-#                        useStateName = TRUE,
-#                        traj_log_file = 'simodel0-traj_linear.tsv',
-#                        traj_log_frequency = 1000
-# )
 
-model <- config_phydyn(xmlfn = "test_ali/relxadClock_TEMPLATE.xml",
-                       saveto = 'phydynbeast_test/new_test_ali/new_xml_afterTalking2Erik/HIVsimple_model_newali_QL_relaxedClock_v7.xml',
+model <- config_phydyn(xmlfn = "Analysis_SD/beast2_phydyn/strict_clock_TEMPLATE.xml",
+                       saveto = 'Analysis_SD/beast2_phydyn/test_strictClock/splines_strictClock.xml',
                        t0parm = confparm(name ='t0', estimate = FALSE, initial = 1977),
                        equations = eqns,
                        parameters = parms,
@@ -200,7 +160,7 @@ model <- config_phydyn(xmlfn = "test_ali/relxadClock_TEMPLATE.xml",
                        minP = 0.001,
                        penaltyAgtY= 0,
                        useStateName = TRUE,
-                       traj_log_file = 'simodel0-traj_linear.tsv',
+                       traj_log_file = 'trajectory.tsv',
                        traj_log_frequency = 1000
 )
 

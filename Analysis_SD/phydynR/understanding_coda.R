@@ -5,11 +5,12 @@ library(BayesianTools)
 #get the data that was completed i = 800 iterations
 
 #list the name of files with results
-mcmc_results <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/high/region1000global500/mh1990/results_10000bp", recursive = TRUE, full.names = TRUE)
-#mcmc_results <- list.files("Analysis_SD/phydynR/mcmc_results/QMUL_cluster/region1000global100/results_10000bp", recursive = TRUE, full.names = TRUE)
+mcmc_results <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region1000global100/all_tree/run1/results", recursive = TRUE, full.names = TRUE)
 
 mcmc_results_iter.data <- mcmc_results[grepl("iter.rdata", mcmc_results)]
+length(mcmc_results_iter.data)
 mcmc_results_out <- mcmc_results[grepl("out_sim.RDS", mcmc_results)]
+length(mcmc_results_out)
 
 for(j in 1:length(mcmc_results_iter.data)){
 

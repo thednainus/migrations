@@ -101,7 +101,8 @@ total_splines <- function(t){
   #dlogbeta <- rnorm(7, 0, 0.5)
   dlogbeta <- rnorm(7, 0, 0.05)
   #b1 <- rnorm(1, 0, 0.6)
-  b1 <- rnorm(1, 0, 2)
+  #b1 <- rnorm(1, 0, 2)
+  b1 <- runif(1, 0, 2)
   #b1 <- rlnorm(1, 2.7, 0.5)
 
   beta1 <- beta1_f(t,b1)
