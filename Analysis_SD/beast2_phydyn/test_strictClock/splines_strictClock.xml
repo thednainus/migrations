@@ -374,13 +374,13 @@
       <log id="TreeWithMetaDataLogger.t:model0_ali" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:model0_ali"/>
     </logger>
     <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
-    <operator id="phydyn.a.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a" windowSize="1e-05" weight="1" useGaussian="true"/>
-    <operator id="phydyn.b.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b" windowSize="0.005" weight="1" useGaussian="true"/>
-    <operator id="phydyn.b1.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1" windowSize="0.1" weight="1" useGaussian="true"/>
+    <operator id="phydyn.a.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a" windowSize="1e-05" weight="2" useGaussian="true"/>
+    <operator id="phydyn.b.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b" windowSize="0.005" weight="2" useGaussian="true"/>
+    <operator id="phydyn.b1.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1" windowSize="0.1" weight="15" useGaussian="true"/>
     <operator id="phydyn.dlogbeta.operator" spec="RealRandomWalkOperator" parameter="@phydyn.dlogbeta" windowSize="1" weight="1" useGaussian="true"/>
-    <operator id="phydyn.srcMigrationRate.operator" spec="RealRandomWalkOperator" parameter="@phydyn.srcMigrationRate" windowSize="0.01" weight="1" useGaussian="true"/>
-    <operator id="phydyn.I.operator" spec="RealRandomWalkOperator" parameter="@phydyn.I" windowSize="0.1" weight="1" useGaussian="true"/>
-    <operator id="phydyn.src.operator" spec="RealRandomWalkOperator" parameter="@phydyn.src" windowSize="1000" weight="1" useGaussian="true"/>
+    <operator id="phydyn.srcMigrationRate.operator" spec="RealRandomWalkOperator" parameter="@phydyn.srcMigrationRate" windowSize="0.01" weight="2" useGaussian="true"/>
+    <operator id="phydyn.I.operator" spec="RealRandomWalkOperator" parameter="@phydyn.I" windowSize="0.1" weight="5" useGaussian="true"/>
+    <operator id="phydyn.src.operator" spec="RealRandomWalkOperator" parameter="@phydyn.src" windowSize="1000" weight="35" useGaussian="true"/>
     <logger id="popTrajLog" spec="Logger" fileName="trajectory.tsv" logEvery="2000">
       <log id="trajectoryLogger" spec="phydyn.loggers.TrajectoryLogger" pointFrequency="1" logrates="all" popModel="@PhyDynPopModel"/>
     </logger>

@@ -9,9 +9,10 @@ library(SDBenefits)
 #get file with sequences in FASTA format
 fastafn <- list.files(path = ".", pattern = "*.fasta")
 #fastafn <- "test_ali/model0_ali_1000bp.fasta"
+fastafn <- "test_ali/test_ali.fasta"
 
 #load xml TEMPLATE to run beast2 phydyn
-xmlfn <- system.file("xml_template/beast_phydyn_splines_TEMPLATE.xml", package="SDBenefits")
+xmlfn <- system.file("xml_template/beast_phydyn_strictClock_TEMPLATE.xml", package="SDBenefits")
 
 #save xml file to disk
 format_xml_phydyn(xmlfn, fastafn)

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beast beautitemplate="Standard" beautistatus="" namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.base.evolution.alignment:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="BEAST.base v2.7.6" version="2.7">
+  <data id="model0_ali" spec="Alignment" name="alignment">
+    SEQUENCES
+  </data>
+  <map name="Uniform">beast.base.inference.distribution.Uniform</map>
+  <map name="Exponential">beast.base.inference.distribution.Exponential</map>
+  <map name="LogNormal">beast.base.inference.distribution.LogNormalDistributionModel</map>
+  <map name="Normal">beast.base.inference.distribution.Normal</map>
+  <map name="Beta">beast.base.inference.distribution.Beta</map>
+  <map name="Gamma">beast.base.inference.distribution.Gamma</map>
+  <map name="LaplaceDistribution">beast.base.inference.distribution.LaplaceDistribution</map>
+  <map name="prior">beast.base.inference.distribution.Prior</map>
+  <map name="InverseGamma">beast.base.inference.distribution.InverseGamma</map>
+  <map name="OneOnX">beast.base.inference.distribution.OneOnX</map>
+  <run id="mcmc" spec="MCMC" chainLength="20000000">
+    <state id="state" spec="State" storeEvery="2000">
+      <tree id="Tree.t:model0_ali" spec="beast.base.evolution.tree.Tree" name="stateNode">
+        <trait id="dateTrait.t:model0_ali" spec="beast.base.evolution.tree.TraitSet" traitname="date" value="DATE_TRAIT">
+          <taxa id="TaxonSet.model0_ali" spec="TaxonSet">
+            <alignment idref="model0_ali"/>
+          </taxa>
+        </trait>
+        <taxonset idref="TaxonSet.model0_ali"/>
+      </tree>
+      <!-- <parameter id="birthRate.t:model0_ali" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter> -->
+      <parameter id="clockRate.c:model0_ali" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+      <parameter id="kappa.s:model0_ali" spec="parameter.RealParameter" lower="0.0" name="stateNode">2.0</parameter>
+      <parameter id="phydyn.a" spec="parameter.RealParameter" name="stateNode" lower="-1" upper="1">1e-04</parameter>
+      <parameter id="phydyn.b" spec="parameter.RealParameter" name="stateNode" lower="0.001" upper="2">0.05</parameter>
+      <parameter id="phydyn.b1" spec="parameter.RealParameter" name="stateNode" lower="0" upper="2">1</parameter>
+      <parameter id="phydyn.dlogbeta" spec="parameter.RealParameter" dimension='7' name="stateNode" lower="-Infinity" upper="Infinity">0</parameter>
+      <parameter id="phydyn.srcMigrationRate" spec="parameter.RealParameter" name="stateNode" lower="0.0416666666666667" upper="1">0.1</parameter>
+      <parameter id="phydyn.I" spec="parameter.RealParameter" name="stateNode" lower="1" upper="500">1</parameter>
+      <parameter id="phydyn.src" spec="parameter.RealParameter" name="stateNode" lower="1" upper="1e+05">10000</parameter>
+    </state>
+    <init id="RandomTree.t:model0_ali" spec="RandomTree" estimate="false" initial="@Tree.t:model0_ali" taxa="@model0_ali">
+      <populationModel id="ConstantPopulation0.t:model0_ali" spec="ConstantPopulation">
+        <parameter id="randomPopSize.t:model0_ali" spec="parameter.RealParameter" name="popSize">1.0</parameter>
+      </populationModel>
+    </init>
+    <distribution id="posterior" spec="CompoundDistribution">
+      <distribution id="prior" spec="CompoundDistribution">
+        <!-- <distribution id="YuleModel.t:model0_ali" spec="beast.base.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:model0_ali" tree="@Tree.t:model0_ali"/> -->
+        <!-- <prior id="YuleBirthRatePrior.t:model0_ali" name="distribution" x="@birthRate.t:model0_ali">
+                    <Uniform id="Uniform.1" name="distr" upper="Infinity"/>
+                </prior> -->
+        <prior id="ClockPrior.c:model0_ali" name="distribution" x="@clockRate.c:model0_ali">
+          <Uniform id="Uniform.0" name="distr" upper="Infinity"/>
+        </prior>
+        <prior id="KappaPrior.s:model0_ali" name="distribution" x="@kappa.s:model0_ali">
+          <LogNormal id="LogNormalDistributionModel.0" name="distr">
+            <parameter id="RealParameter.1" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
+            <parameter id="RealParameter.2" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
+          </LogNormal>
+        </prior>
+        <distribution id="PhyDynModelLikelihood" spec="phydyn.distribution.STreeLikelihoodODE" equations="QL" minP="0.001" penaltyAgtY="0" useStateName="true">
+          <popmodel id="PhyDynPopModel" spec="phydyn.model.PopModelODE">
+            <popParams id="initValues" spec="phydyn.model.TrajectoryParameters" integrationSteps="100">
+              <initialValue id="initialValue.phydyn.I" spec="phydyn.model.ParamValue" pname="I" pvalue="@phydyn.I"/>
+              <initialValue id="initialValue.phydyn.src" spec="phydyn.model.ParamValue" pname="src" pvalue="@phydyn.src"/>
+              <initialValue id="initialValue.phydyn.Tr" spec="phydyn.model.ParamValue" pname="Tr">
+                <parameter id="phydyn.Tr" spec="parameter.RealParameter" estimate="false" name="pvalue" lower="0.0">0</parameter>
+              </initialValue>
+              <parameter id="phydyn.t0" spec="parameter.RealParameter" name="t0" estimate="false">1977</parameter>
+            </popParams>
+            <modelParams id="rates" spec="phydyn.model.ModelParameters">
+              <param id="modelParams.phydyn.a" spec="phydyn.model.ParamValue" pname="a" pvalue="@phydyn.a"/>
+              <param id="modelParams.phydyn.b" spec="phydyn.model.ParamValue" pname="b" pvalue="@phydyn.b"/>
+              <param id="modelParams.phydyn.b1" spec="phydyn.model.ParamValue" pname="b1" pvalue="@phydyn.b1"/>
+              <param id="modelParams.phydyn.dlogbeta" spec="phydyn.model.ParamValue" isVector='true' pname="dlogbeta" pvalue="@phydyn.dlogbeta"/>
+              <param id="modelParam.phydyn.gamma" spec="phydyn.model.ParamValue" pname="gamma">
+                <parameter id="phydyn.gamma" spec="parameter.RealParameter" estimate="false" name="pvalue">0.197628458498024</parameter>
+              </param>
+              <param id="modelParam.phydyn.srcGrowthRate" spec="phydyn.model.ParamValue" pname="srcGrowthRate">
+                <parameter id="phydyn.srcGrowthRate" spec="parameter.RealParameter" estimate="false" name="pvalue">0.333333333333333</parameter>
+              </param>
+              <param id="modelParams.phydyn.srcMigrationRate" spec="phydyn.model.ParamValue" pname="srcMigrationRate" pvalue="@phydyn.srcMigrationRate"/>
+            </modelParams>
+            <definition id="definition...a5cecb07360d91ca3b81322fa8524984" spec="phydyn.model.Definition" value="beta1 = if (t!&gt;1980) then 0.0 else (max(0.0, b1))"/>
+            <definition id="definition...a12728e61c8aabd0f13b975d291fa7b7" spec="phydyn.model.Definition" value="betalb = if ( t !&gt;= 1980 ) then 0&#10;             else if (t  !&gt;= 1985 ) then beta1&#10;             else if (t  !&gt;= 1990 ) then beta1 * exp( dlogbeta[0] )&#10;             else if (t  !&gt;= 1995 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] )&#10;             else if (t  !&gt;= 2000 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] )&#10;             else if (t  !&gt;= 2005 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] )&#10;             else if (t  !&gt;= 2010 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] )&#10;             else if (t  !&gt;= 2015 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] )&#10;                      else ( beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] + dlogbeta[6] ) )"/>
+            <definition id="definition...3d1352d8fb8b80172fea1316c3469274" spec="phydyn.model.Definition" value="betaub = if ( t !&gt;= 1980 ) then 0&#10;             else if (t  !&gt;= 1985 ) then beta1 * exp( dlogbeta[0] )&#10;             else if (t  !&gt;= 1990 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] )&#10;             else if (t  !&gt;= 1995 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] )&#10;             else if (t  !&gt;= 2000 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] )&#10;             else if (t  !&gt;= 2005 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] )&#10;             else if (t  !&gt;= 2010 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] )&#10;             else if (t  !&gt;= 2015 ) then beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] + dlogbeta[6] )&#10;                     else ( beta1 * exp( dlogbeta[0] + dlogbeta[1] + dlogbeta[2] + dlogbeta[3] + dlogbeta[4] + dlogbeta[5] + dlogbeta[6] ) )"/>
+            <definition id="definition...8c62064e1c27600ac24c72b2bb5aad79" spec="phydyn.model.Definition" value="tlb  = if (t!&gt;= 1980 ) then 1980&#10;             else if (t  !&gt;= 1990 ) then 1985&#10;             else if (t  !&gt;= 1995 ) then 1990&#10;             else if (t  !&gt;= 2000 ) then 1995&#10;             else if (t  !&gt;= 2005 ) then 2000&#10;             else if (t  !&gt;= 2010 ) then 2005&#10;             else if (t  !&gt;= 2015 ) then 2010&#10;             else if (t  !&gt;= 2020 ) then 2015&#10;                     else(2020)"/>
+            <definition id="definition...e430df82783a9e537ecf713b70575cee" spec="phydyn.model.Definition" value="propub = max(0, min(1, (t-tlb)/(5)))"/>
+            <definition id="definition...a10bdcfaa0fabae4f922b06c4f200519" spec="phydyn.model.Definition" value="beta = max(0, propub * betaub + (1-propub)*betalb)"/>
+            <definition id="definition...c9d3fa5712bdcb64ba2931e1d2c6a8f2" spec="phydyn.model.Definition" value="alpha = if ((t!&gt;1995)) then 0.0 else max(0.0, a*t + b)"/>
+            <matrixeq id="birth.src.src.b5f6f784630836c33751562304b114ea" spec="phydyn.model.MatrixEquation" type="birth" origin="src" destination="src">srcGrowthRate*src</matrixeq>
+            <matrixeq id="birth.I.I.5246690718ea9d7d148b5807f032b5d8" spec="phydyn.model.MatrixEquation" type="birth" origin="I" destination="I">beta*I</matrixeq>
+            <matrixeq id="migration.src.I.4a88e6df484cd8a5abf75cbfa2c910c6" spec="phydyn.model.MatrixEquation" type="migration" origin="src" destination="I">srcMigrationRate*I</matrixeq>
+            <matrixeq id="death.I..d236ad6435dbab655c93b849e2749e3a" spec="phydyn.model.MatrixEquation" type="death" origin="I">gamma*I + alpha*I</matrixeq>
+            <matrixeq id="nondeme.Tr..9e2688133aa1cd669b68afbe7e888b17" spec="phydyn.model.MatrixEquation" type="nondeme" origin="Tr">alpha*I</matrixeq>
+          </popmodel>
+          <treeIntervals id="STreeIntervals" spec="phydyn.evolution.tree.coalescent.STreeIntervals" tree="@Tree.t:model0_ali"/>
+        </distribution>
+        <prior x="@phydyn.a" name="distribution" id="phydyn.a.prior">
+          <Normal name="distr" id="phydyn.a.prior.normal">
+            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.a.prior.normal.RealParameter.1">0</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.a.prior.normal.RealParameter.2">1e-05</parameter>
+          </Normal>
+        </prior>
+        <prior x="@phydyn.b" name="distribution" id="phydyn.b.prior">
+          <Normal name="distr" id="phydyn.b.prior.normal">
+            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.b.prior.normal.RealParameter.1">0</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.b.prior.normal.RealParameter.2">0.3</parameter>
+          </Normal>
+        </prior>
+        <prior x="@phydyn.b1" name="distribution" id="phydyn.b1.prior">
+          <Uniform id="Uniform.1" name="distr" lower="0" upper="2"/>
+        </prior>
+        <prior x="@phydyn.dlogbeta" name="distribution" id="phydyn.dlogbeta.prior">
+          <Normal name="distr" id="phydyn.dlogbeta.prior.normal">
+            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.dlogbeta.prior.normal.RealParameter.1">0</parameter>
+            <parameter name="sigma" estimate="false" spec="parameter.RealParameter" id="phydyn.dlogbeta.prior.normal.RealParameter.2">0.05</parameter>
+          </Normal>
+        </prior>
+        <prior x="@phydyn.srcMigrationRate" name="distribution" id="phydyn.srcMigrationRate.prior">
+          <LogNormal name="distr" id="phydyn.srcMigrationRate.prior.lognormal">
+            <parameter name="M" estimate="false" spec="parameter.RealParameter" id="phydyn.srcMigrationRate.prior.lognormal.RealParameter.1">-2.99573227355399</parameter>
+            <parameter name="S" estimate="false" spec="parameter.RealParameter" id="phydyn.srcMigrationRate.prior.lognormal.RealParameter.2">0.25</parameter>
+          </LogNormal>
+        </prior>
+        <prior x="@phydyn.I" name="distribution" id="phydyn.I.prior">
+          <Exponential name="distr" id="phydyn.I.prior.exponential">
+            <parameter name="mean" estimate="false" spec="parameter.RealParameter" id="phydyn.I.prior.exponential.RealParameter.1">0.2</parameter>
+          </Exponential>
+        </prior>
+        <prior x="@phydyn.src" name="distribution" id="phydyn.src.prior">
+          <LogNormal name="distr" id="phydyn.src.prior.lognormal">
+            <parameter name="M" estimate="false" spec="parameter.RealParameter" id="phydyn.src.prior.lognormal.RealParameter.1">7.3132203870903</parameter>
+            <parameter name="S" estimate="false" spec="parameter.RealParameter" id="phydyn.src.prior.lognormal.RealParameter.2">0.5</parameter>
+          </LogNormal>
+        </prior>
+      </distribution>
+      <distribution id="likelihood" spec="CompoundDistribution" useThreads="true">
+        <distribution id="treeLikelihood.model0_ali" spec="ThreadedTreeLikelihood" data="@model0_ali" tree="@Tree.t:model0_ali">
+          <siteModel id="SiteModel.s:model0_ali" spec="SiteModel">
+            <parameter id="mutationRate.s:model0_ali" spec="parameter.RealParameter" estimate="false" lower="0.0" name="mutationRate">1.0</parameter>
+            <parameter id="gammaShape.s:model0_ali" spec="parameter.RealParameter" estimate="false" lower="0.1" name="shape">1.0</parameter>
+            <parameter id="proportionInvariant.s:model0_ali" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+            <substModel id="hky.s:model0_ali" spec="HKY" kappa="@kappa.s:model0_ali">
+              <frequencies id="empiricalFreqs.s:model0_ali" spec="Frequencies" data="@model0_ali"/>
+            </substModel>
+          </siteModel>
+          <branchRateModel id="StrictClock.c:model0_ali" spec="beast.base.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:model0_ali"/>
+        </distribution>
+      </distribution>
+    </distribution>
+    <!-- <operator id="YuleBirthRateScaler.t:model0_ali" spec="kernel.BactrianScaleOperator" parameter="@birthRate.t:model0_ali" upper="10.0" weight="3.0"/> -->
+    <operator id="YuleModelTreeRootScaler.t:model0_ali" spec="kernel.BactrianScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:model0_ali" upper="10.0" weight="3.0"/>
+    <operator id="YuleModelUniformOperator.t:model0_ali" spec="kernel.BactrianNodeOperator" tree="@Tree.t:model0_ali" weight="30.0"/>
+    <operator id="YuleModelSubtreeSlide.t:model0_ali" spec="kernel.BactrianSubtreeSlide" tree="@Tree.t:model0_ali" weight="15.0"/>
+    <operator id="YuleModelNarrow.t:model0_ali" spec="Exchange" tree="@Tree.t:model0_ali" weight="15.0"/>
+    <operator id="YuleModelWide.t:model0_ali" spec="Exchange" isNarrow="false" tree="@Tree.t:model0_ali" weight="3.0"/>
+    <operator id="YuleModelWilsonBalding.t:model0_ali" spec="WilsonBalding" tree="@Tree.t:model0_ali" weight="3.0"/>
+    <operator id="YuleModelBICEPSEpochTop.t:model0_ali" spec="EpochFlexOperator" scaleFactor="0.1" tree="@Tree.t:model0_ali" weight="2.0"/>
+    <operator id="YuleModelBICEPSEpochAll.t:model0_ali" spec="EpochFlexOperator" fromOldestTipOnly="false" scaleFactor="0.1" tree="@Tree.t:model0_ali" weight="2.0"/>
+    <operator id="YuleModelBICEPSTreeFlex.t:model0_ali" spec="TreeStretchOperator" scaleFactor="0.01" tree="@Tree.t:model0_ali" weight="2.0"/>
+    <operator id="StrictClockRateScaler.c:model0_ali" spec="AdaptableOperatorSampler" weight="1.5">
+      <parameter idref="clockRate.c:model0_ali"/>
+      <operator id="AVMNOperator.model0_ali" spec="kernel.AdaptableVarianceMultivariateNormalOperator" allowNonsense="true" beta="0.05" burnin="400" initial="800" weight="0.1">
+        <transformations id="AVMNSumTransform.model0_ali" spec="operator.kernel.Transform$LogConstrainedSumTransform"/>
+        <transformations id="AVMNLogTransform.model0_ali" spec="operator.kernel.Transform$LogTransform">
+          <f idref="clockRate.c:model0_ali"/>
+          <f idref="kappa.s:model0_ali"/>
+        </transformations>
+        <transformations id="AVMNNoTransform.model0_ali" spec="operator.kernel.Transform$NoTransform">
+          <f idref="Tree.t:model0_ali"/>
+        </transformations>
+      </operator>
+      <operator id="StrictClockRateScalerX.c:model0_ali" spec="kernel.BactrianScaleOperator" parameter="@clockRate.c:model0_ali" upper="10.0" weight="3.0"/>
+    </operator>
+    <operator id="strictClockUpDownOperator.c:model0_ali" spec="AdaptableOperatorSampler" weight="1.5">
+      <parameter idref="clockRate.c:model0_ali"/>
+      <tree idref="Tree.t:model0_ali"/>
+      <operator idref="AVMNOperator.model0_ali"/>
+      <operator id="strictClockUpDownOperatorX.c:model0_ali" spec="operator.kernel.BactrianUpDownOperator" scaleFactor="0.75" weight="3.0">
+        <up idref="clockRate.c:model0_ali"/>
+        <down idref="Tree.t:model0_ali"/>
+      </operator>
+    </operator>
+    <operator id="KappaScaler.s:model0_ali" spec="AdaptableOperatorSampler" weight="0.05">
+      <parameter idref="kappa.s:model0_ali"/>
+      <operator idref="AVMNOperator.model0_ali"/>
+      <operator id="KappaScalerX.s:model0_ali" spec="kernel.BactrianScaleOperator" parameter="@kappa.s:model0_ali" scaleFactor="0.1" upper="10.0" weight="0.1"/>
+    </operator>
+    <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="2000" model="@posterior" sanitiseHeaders="true" sort="smart">
+      <log idref="posterior"/>
+      <log idref="likelihood"/>
+      <log idref="prior"/>
+      <log idref="treeLikelihood.model0_ali"/>
+      <log id="TreeHeight.t:model0_ali" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:model0_ali"/>
+      <!-- <log idref="YuleModel.t:model0_ali"/> -->
+      <!-- <log idref="birthRate.t:model0_ali"/> -->
+      <log idref="clockRate.c:model0_ali"/>
+      <log idref="kappa.s:model0_ali"/>
+      <log idref="phydyn.a"/>
+      <log idref="phydyn.b"/>
+      <log idref="phydyn.b1"/>
+      <log idref="phydyn.dlogbeta"/>
+      <log idref="phydyn.gamma"/>
+      <log idref="phydyn.srcGrowthRate"/>
+      <log idref="phydyn.srcMigrationRate"/>
+      <log idref="phydyn.I"/>
+      <log idref="phydyn.src"/>
+      <log idref="phydyn.Tr"/>
+      <log idref="phydyn.t0"/>
+    </logger>
+    <logger id="screenlog" spec="Logger" logEvery="2000">
+      <log idref="posterior"/>
+      <log idref="likelihood"/>
+      <log idref="prior"/>
+      <log idref="phydyn.a"/>
+      <log idref="phydyn.b"/>
+      <log idref="phydyn.b1"/>
+      <log idref="phydyn.dlogbeta"/>
+      <log idref="phydyn.gamma"/>
+      <log idref="phydyn.srcGrowthRate"/>
+      <log idref="phydyn.srcMigrationRate"/>
+      <log idref="phydyn.I"/>
+      <log idref="phydyn.src"/>
+      <log idref="phydyn.Tr"/>
+      <log idref="phydyn.t0"/>
+    </logger>
+    <logger id="treelog.t:model0_ali" spec="Logger" fileName="$(filebase)-$(tree).trees" logEvery="2000" mode="tree">
+      <log id="TreeWithMetaDataLogger.t:model0_ali" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:model0_ali"/>
+    </logger>
+    <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+    <operator id="phydyn.a.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a" windowSize="1e-05" weight="2" useGaussian="true"/>
+    <operator id="phydyn.b.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b" windowSize="0.005" weight="2" useGaussian="true"/>
+    <operator id="phydyn.b1.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1" windowSize="0.1" weight="15" useGaussian="true"/>
+    <operator id="phydyn.dlogbeta.operator" spec="RealRandomWalkOperator" parameter="@phydyn.dlogbeta" windowSize="1" weight="1" useGaussian="true"/>
+    <operator id="phydyn.srcMigrationRate.operator" spec="RealRandomWalkOperator" parameter="@phydyn.srcMigrationRate" windowSize="0.01" weight="2" useGaussian="true"/>
+    <operator id="phydyn.I.operator" spec="RealRandomWalkOperator" parameter="@phydyn.I" windowSize="0.1" weight="5" useGaussian="true"/>
+    <operator id="phydyn.src.operator" spec="RealRandomWalkOperator" parameter="@phydyn.src" windowSize="1000" weight="35" useGaussian="true"/>
+    <logger id="popTrajLog" spec="Logger" fileName="trajectory.tsv" logEvery="2000">
+      <log id="trajectoryLogger" spec="phydyn.loggers.TrajectoryLogger" pointFrequency="1" logrates="all" popModel="@PhyDynPopModel"/>
+    </logger>
+  </run>
+</beast>

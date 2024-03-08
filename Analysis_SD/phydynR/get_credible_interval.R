@@ -8,37 +8,50 @@ library(ggplot2)
 #get the data that was completed i = 800 iterations
 
 #list the name of files with results
-mcmc_results <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region1000global100/all_tree/run1", recursive = TRUE, full.names = TRUE)
+#run1
+mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region1000global500/mh1990/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+#run2
+mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region1000global500/mh1990/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
+
+#run1
+mcmc_results_iter.data1 <- mcmc_results1[grepl("iter.rdata", mcmc_results1)]
+mcmc_results_iter.data1 <- mcmc_results_iter.data1[-c(8,25,31,38)]
+length(mcmc_results_iter.data1)
+mcmc_results_out1 <- mcmc_results1[grepl("out_sim.RDS", mcmc_results1)]
+mcmc_results_out1 <- mcmc_results_out1[-c(8,25,31,38)]
+length(mcmc_results_out1)
+
+#run2
+mcmc_results_iter.data2 <- mcmc_results2[grepl("iter.rdata", mcmc_results2)]
+mcmc_results_iter.data2 <- mcmc_results_iter.data2[-c(8,25,31,38)]
+length(mcmc_results_iter.data2)
+
+mcmc_results_out2 <- mcmc_results2[grepl("out_sim.RDS", mcmc_results2)]
+mcmc_results_out2 <- mcmc_results_out2[-c(8,25,31,38)]
+length(mcmc_results_out2)
 
 
-mcmc_results_iter.data <- mcmc_results[grepl("iter.rdata", mcmc_results)]
-#for 1,000bp
-mcmc_results_iter.data <- mcmc_results_iter.data[-c(1,2,17,26,43,48)]
-
-
-mcmc_results_out <- mcmc_results[grepl("out_sim.RDS", mcmc_results)]
-mcmc_results_out <- mcmc_results_out[-c(1,2,17,26,43,48)]
 
 CI_all <- tibble()
 
-for(j in 1:length(mcmc_results_iter.data)){
+for(j in 1:length(mcmc_results_iter.data1)){
 
-  load(mcmc_results_iter.data[j])
+  load(mcmc_results_iter.data1[j])
   print(i)
 
-  if(i >= 401){
+  if(i == 801){
 
     print(j)
-    texts <- str_split(mcmc_results_out[j], "/")
+    texts <- str_split(mcmc_results_out1[j], "/")
     tips <- texts[[1]][7]
-    seqlen <- texts[[1]][9]
+    seqlen <- texts[[1]][10]
     if(seqlen == "results"){
       seqlen <- "1000bp"
     }else{
       seqlen <- "10000bp"
     }
 
-    rep <- str_split(texts[[1]][10], "_")[[1]][2]
+    rep <- str_split(texts[[1]][11], "_")[[1]][2]
     mig_rate <- texts[[1]][6]
     if(mig_rate == "medium"){
       mig_rate <-  0.1
@@ -49,32 +62,42 @@ for(j in 1:length(mcmc_results_iter.data)){
     }
     tree_data <- texts[[1]][8]
 
-    out <- readRDS(mcmc_results_out[j])
-    #out1 <- getSample(out, start = 7500)
-    #summary(out1)
+
+    out1 <- readRDS(mcmc_results_out1[j])
+    out2 <- readRDS(mcmc_results_out2[j])
 
     #convert to coda
-    out_coda <- BayesianTools::getSample(out, start = 4000, coda = TRUE)
+    out1_coda <- BayesianTools::getSample(out1, start = 5000, coda = TRUE)
+    out2_coda <- BayesianTools::getSample(out2, start = 5000, coda = TRUE)
     #quartz()
     #plot(out_coda, ask = TRUE)
 
-    summary_results <- summary(out_coda)
-    lower <- summary_results$quantiles[3,1]
-    median <- summary_results$quantiles[3,3]
-    upper <- summary_results$quantiles[3,5]
-    quantiles_results <- tibble(tips = tips,
+    #for run1
+    summary_results1 <- summary(out1_coda)
+    lower1 <- summary_results1$quantiles[3,1]
+    median1 <- summary_results1$quantiles[3,3]
+    upper1 <- summary_results1$quantiles[3,5]
+
+    #for run2
+    summary_results2 <- summary(out2_coda)
+    lower2 <- summary_results2$quantiles[3,1]
+    median2 <- summary_results2$quantiles[3,3]
+    upper2 <- summary_results2$quantiles[3,5]
+
+    quantiles_results <- tibble(index = j,
+                                tips = tips,
                                 seqlen = seqlen,
                                 replicate = rep,
                                 mig_rate = mig_rate,
                                 tree_data = tree_data,
-                                lower = lower,
-                                median = median,
-                                upper = upper)
+                                lower1 = lower1,
+                                median1 = median1,
+                                upper1 = upper1,
+                                lower2 = lower2,
+                                median2 = median2,
+                                upper2 = upper2)
 
     CI_all <- rbind(CI_all, quantiles_results)
-
-
-
   }
 }
 
@@ -82,6 +105,7 @@ View(CI_all)
 
 filename <- paste(CI_all$tips[1], CI_all$tree_data[1], CI_all$mig_rate[1],
                   CI_all$seqlen[1], sep = "_")
+print(filename)
 filename <- paste(filename, ".RDS", sep = "")
 saveRDS(CI_all, filename)
 
@@ -90,7 +114,7 @@ saveRDS(CI_all, filename)
 
 
 
-CI_all_sorted <- CI_all[order(CI_all$median),]
+CI_all_sorted <- CI_all[order(CI_all$median1),]
 CI_all_sorted["order_rep"] <- 1:nrow(CI_all_sorted)
 CI_all_sorted$order_rep <- as.factor(CI_all_sorted$order_rep)
 
@@ -107,13 +131,13 @@ prior_mig_df$order_rep <- as.factor(prior_mig_df$order_rep)
 quartz()
 
 
-ggplot(CI_all_sorted, aes(x = order_rep, y = median)) +
+ggplot(CI_all_sorted, aes(x = order_rep, y = median1)) +
   geom_point(size = 2) +
-  geom_errorbar(aes(ymax = upper, ymin = lower)) +
-  geom_hline(yintercept=0.3, linetype="dashed") +
+  geom_errorbar(aes(ymax = upper1, ymin = lower1)) +
+  geom_hline(yintercept=0.33, linetype="dashed") +
   scale_x_discrete(guide = guide_axis(angle = 90)) +
   theme_bw() +
-  ggtitle("Credible interval for posterior: 1,000 region tips and 500 global tips: 9,719bp (MH 1990)") +
+  ggtitle("Credible interval for posterior: 1,000 region tips and 100 global tips: 1,000bp (all_tree)") +
   ylab("Median and 2.5% and 97.5% quantiles") +
   xlab("Replicate number") +
   theme(text = element_text(size=14))
