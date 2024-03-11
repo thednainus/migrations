@@ -6,8 +6,8 @@ library(stringr)
 #get the data that was completed i = 800 iterations
 
 #list the name of files with results
-mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region1000global500/mh1990/run1/results", recursive = TRUE, full.names = TRUE)
-mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region1000global500/mh1990/run2/results", recursive = TRUE, full.names = TRUE)
+mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region1000global500/mh1990/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region1000global500/mh1990/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 mcmc_results_iter.data1 <- mcmc_results1[grepl("iter.rdata", mcmc_results1)]
 length(mcmc_results_iter.data1)
