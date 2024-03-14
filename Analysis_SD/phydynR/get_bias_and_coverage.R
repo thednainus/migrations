@@ -9,7 +9,7 @@ library(stringr)
 
 #get the data that was completed i = 800 iterations
 
-CIs <- list.files("Analysis_SD/phydynR/mcmc_results/summary", recursive = TRUE, full.names = TRUE)
+CIs <- list.files("Analysis_SD/phydynR/mcmc_results/summary/credible_intervals", recursive = TRUE, full.names = TRUE)
 
 
 for(j in 1:length(CIs)){

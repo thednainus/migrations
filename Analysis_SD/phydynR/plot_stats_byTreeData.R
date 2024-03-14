@@ -1,26 +1,29 @@
 #plot coverage, precision and relative error for phydynR analyses
 library(data.table)
+library(dplyr)
+library(ggplot2)
+library(stringr)
 
 #get the data
 
 #low migration rate
-low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.0333333333333333_1000bp_stats.RDS")
-low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.0333333333333333_1000bp_stats.RDS")
-low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.0333333333333333_10000bp_stats.RDS")
-low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.0333333333333333_10000bp_stats.RDS")
+low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.0333333333333333_1000bp_stats.RDS")
+low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.0333333333333333_1000bp_stats.RDS")
+low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.0333333333333333_10000bp_stats.RDS")
+low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.0333333333333333_10000bp_stats.RDS")
 
 
 #medium migration rate
-medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.1_1000bp_stats.RDS")
-medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.1_1000bp_stats.RDS")
-medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.1_10000bp_stats.RDS")
-medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.1_10000bp_stats.RDS")
+medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.1_1000bp_stats.RDS")
+medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.1_1000bp_stats.RDS")
+medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.1_10000bp_stats.RDS")
+medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.1_10000bp_stats.RDS")
 
 #high migration rate
-high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.333333333333333_1000bp_stats.RDS")
-high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.333333333333333_1000bp_stats.RDS")
-high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.333333333333333_10000bp_stats.RDS")
-high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.333333333333333_10000bp_stats.RDS")
+high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.333333333333333_1000bp_stats.RDS")
+high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.333333333333333_1000bp_stats.RDS")
+high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.333333333333333_10000bp_stats.RDS")
+high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.333333333333333_10000bp_stats.RDS")
 
 
 
@@ -40,18 +43,15 @@ stats$mig_rate <- as.factor(stats$mig_rate)
 
 coverage <- stats[,c(1:5,8:9)]
 coverage <- distinct(coverage)
-coverage_m <- melt(coverage, id.vars=c("total_reps", "tips", "seqlen", "mig_rate",
-                                 "tree_data"))
-
 
 #plot coverage
 quartz()
-ggplot(coverage_m, aes(x = mig_rate, y = value)) +
-  geom_point(aes(colour = variable, shape = variable)) +
+ggplot(coverage, aes(x = mig_rate, y = coverage1)) +
+  geom_point(aes(colour = tree_data, shape = tree_data)) +
   geom_hline(yintercept=1, linetype="dotted") +
-  facet_wrap( tree_data ~ seqlen, ncol = 2) +
+  facet_wrap(  ~ seqlen, ncol = 2) +
   theme_bw() +
-  ggtitle("Coverage: region 1000; global 100") +
+  ggtitle("Coverage: region 1000; global 500") +
   xlab("Migration rate") +
   theme(text = element_text(size=14))
 
@@ -85,14 +85,12 @@ precision_quantiles["mig_rate"] <- unlist(lapply(precision_quantiles$group, func
 
 quartz()
 ggplot(precision_quantiles, aes(x = mig_rate)) +
-  geom_point(aes(y = median1, colour ="run1"), size = 1) +
-  geom_errorbar(aes(ymax = upper1, ymin = lower1, width = 0.1, colour ="run1")) +
-  geom_point(aes(y = median2, colour ="run2"), size = 1) +
-  geom_errorbar(aes(ymax = upper2, ymin = lower2, width = 0.1, colour ="run2")) +
-  facet_wrap( tree_data ~ seqlen, ncol = 2) +
+  geom_point(aes(y = median1, colour = tree_data), size = 1, position = position_dodge(0.5)) +
+  geom_errorbar(aes(ymax = upper1, ymin = lower1, width = 0.1, colour = tree_data), position= position_dodge(0.5)) +
+  facet_wrap(  ~ seqlen, ncol = 2) +
   geom_hline(yintercept=0, linetype="dotted") +
   theme_bw() +
-  ggtitle("Precision: region 1000; global 100") +
+  ggtitle("Precision: region 1000; global 500") +
   xlab("Migration rate") +
   theme(text = element_text(size=14))
 
@@ -126,13 +124,11 @@ relative_error_quantiles["mig_rate"] <- unlist(lapply(relative_error_quantiles$g
 
 quartz()
 ggplot(relative_error_quantiles, aes(x = mig_rate)) +
-  geom_point(aes(y = median1, colour = "run1"), size = 1) +
-  geom_errorbar(aes(ymax = upper1, ymin = lower1, colour = "run1", width = 0.1)) +
-  geom_point(aes(y = median2, colour = "run2"), size = 1) +
-  geom_errorbar(aes(ymax = upper2, ymin = lower2, colour = "run2", width = 0.1)) +
-  facet_wrap( tree_data ~ seqlen, ncol = 2) +
+  geom_point(aes(y = median1, colour = tree_data), size = 1, position = position_dodge(0.5)) +
+  geom_errorbar(aes(ymax = upper1, ymin = lower1, colour = tree_data, width = 0.1), position = position_dodge(0.5)) +
+  facet_wrap( ~ seqlen, ncol = 2) +
   geom_hline(yintercept=0, linetype="dotted") +
   theme_bw() +
-  ggtitle("Relative Error: region 1000; global 100") +
+  ggtitle("Relative Error: region 1000; global 500") +
   xlab("Migration rate") +
   theme(text = element_text(size=14))
