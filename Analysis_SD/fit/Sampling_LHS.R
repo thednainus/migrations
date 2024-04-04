@@ -32,7 +32,7 @@ sampler_lhs <- function(n = 10000, paramdf){
 #here I return the values of the incidence estimated with ECDC
 
 params3dim_weeks_v1 <- sampler_lhs(n = 10000,
-                             paramdf = data.frame(inc_scale = c(0.01, 0.0),
+                             paramdf = data.frame(inc_scale = c(0.0, 0.01),
                                                   max_diag_rate = c(0.01, 0.1),
                                                   accel_diag_rate = c(0.1, 1.5)
                              ))

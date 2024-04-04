@@ -33,42 +33,34 @@ for(j in 1:length(CIs)){
 
   }
 
-  #precision from run1 and run2
+  #precision from combined runs
 
-  prec1 <- (CI$upper1 - CI$lower1)/unique(CI$mig_rate)
-  prec2 <- (CI$upper2 - CI$lower2)/unique(CI$mig_rate)
+  prec <- (CI$upper - CI$lower)/unique(CI$mig_rate)
 
 
-  #coverage for run1 and run2
+  #coverage for combined runs
 
-  CI["within_range1"] <- ifelse(CI$lower1 >= unique(CI$mig_rate) |
-                                 unique(CI$mig_rate) <= CI$upper1, "yes", "no")
-  coverage1 <- sum(CI$within_range1 == "yes")/nrow(CI)
+  CI["within_range"] <- ifelse(unique(CI$mig_rate) >= CI$lower  &
+                                  unique(CI$mig_rate) <= CI$upper  , "yes", "no")
+  coverage <- sum(CI$within_range == "yes")/nrow(CI)
 
-  CI["within_range2"] <- ifelse(CI$lower2 >= unique(CI$mig_rate) |
-                                  unique(CI$mig_rate) <= CI$upper2, "yes", "no")
-  coverage2 <- sum(CI$within_range2 == "yes")/nrow(CI)
 
-  #relative error for run1 and run2
+  #relative error for combined runs
 
-  mean_relative_error1 <- abs((CI$median1 - unique(CI$mig_rate))/unique(CI$mig_rate))
-  mean_relative_error2 <- abs((CI$median2 - unique(CI$mig_rate))/unique(CI$mig_rate))
+  relative_error <- abs((CI$median - unique(CI$mig_rate))/unique(CI$mig_rate))
 
   all_stats <- tibble(total_reps = nrow(CI),
                       tips = unique(CI$tips),
                       seqlen = unique(CI$seqlen),
                       mig_rate = unique(CI$mig_rate),
                       tree_data = unique(CI$tree_data),
-                      prec1 = prec1,
-                      prec2 = prec2,
-                      coverage1 = coverage1,
-                      coverage2 = coverage2,
-                      mean_relative_error1 = mean_relative_error1,
-                      mean_relative_error2 = mean_relative_error2)
+                      prec = prec,
+                      coverage = coverage,
+                      relative_error = relative_error)
 
   filename <- paste(CI$tips[1], CI$tree_data[1], CI$mig_rate[1],
                     CI$seqlen[1], "stats", sep = "_")
-  filename <- paste(filename, ".RDS", sep = "")
+  filename <- paste(filename, "_combined.RDS", sep = "")
   print(filename)
   saveRDS(all_stats, filename)
 }

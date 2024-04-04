@@ -1,26 +1,29 @@
 #plot coverage, precision and relative error for phydynR analyses
 library(data.table)
+library(ggplot2)
+library(dplyr)
+library(stringr)
 
 #get the data
 
 #low migration rate
-low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.0333333333333333_1000bp_stats.RDS")
-low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.0333333333333333_1000bp_stats.RDS")
-low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.0333333333333333_10000bp_stats.RDS")
-low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.0333333333333333_10000bp_stats.RDS")
+low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_all_tree_0.0333333333333333_1000bp_stats_combined.RDS")
+low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_mh1990_0.0333333333333333_1000bp_stats_combined.RDS")
+low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_all_tree_0.0333333333333333_10000bp_stats_combined.RDS")
+low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_mh1990_0.0333333333333333_10000bp_stats_combined.RDS")
 
 
 #medium migration rate
-medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.1_1000bp_stats.RDS")
-medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.1_1000bp_stats.RDS")
-medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.1_10000bp_stats.RDS")
-medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.1_10000bp_stats.RDS")
+medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_all_tree_0.1_1000bp_stats_combined.RDS")
+medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_mh1990_0.1_1000bp_stats_combined.RDS")
+medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_all_tree_0.1_10000bp_stats_combined.RDS")
+medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_mh1990_0.1_10000bp_stats_combined.RDS")
 
 #high migration rate
-high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.333333333333333_1000bp_stats.RDS")
-high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.333333333333333_1000bp_stats.RDS")
-high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.333333333333333_10000bp_stats.RDS")
-high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.333333333333333_10000bp_stats.RDS")
+high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_all_tree_0.333333333333333_1000bp_stats_combined.RDS")
+high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_mh1990_0.333333333333333_1000bp_stats_combined.RDS")
+high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_all_tree_0.333333333333333_10000bp_stats_combined.RDS")
+high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/combined_runs/region1000global100_mh1990_0.333333333333333_10000bp_stats_combined.RDS")
 
 
 
@@ -34,105 +37,103 @@ stats <- rbind(low_allTree_1000bp, low_mh1990_1000bp,
 stats["mig_rate"] <- unlist(lapply(stats$mig_rate, function(x) round(x, 2)))
 stats$mig_rate <- as.character(stats$mig_rate)
 stats$mig_rate <- as.factor(stats$mig_rate)
+stats["migration_seqlen"] <- paste(stats$mig_rate, stats$seqlen, sep = "/")
+stats <- stats[,2:9]
 
 
 #coverage ----
 
-coverage <- stats[,c(1:5,8:9)]
+coverage <- stats[,c(1:4,6,8)]
 coverage <- distinct(coverage)
-coverage_m <- melt(coverage, id.vars=c("total_reps", "tips", "seqlen", "mig_rate",
-                                 "tree_data"))
+coverage_m <- melt(coverage, id.vars=c("tips", "seqlen", "mig_rate", "tree_data", "migration_seqlen"))
+coverage_m["value2"] <- coverage_m$value * 100
 
 
 #plot coverage
 quartz()
-ggplot(coverage_m, aes(x = mig_rate, y = value)) +
-  geom_point(aes(colour = variable, shape = variable)) +
-  geom_hline(yintercept=1, linetype="dotted") +
-  facet_wrap( tree_data ~ seqlen, ncol = 2) +
+ggplot(coverage_m, aes(x = migration_seqlen, y = value2)) +
+  geom_point(aes(colour = tree_data, shape = tree_data), size = 3) +
+  geom_hline(yintercept=100, linetype="dotted") +
   theme_bw() +
+  scale_x_discrete(guide = guide_axis(angle = -15)) +
   ggtitle("Coverage: region 1000; global 100") +
-  xlab("Migration rate") +
-  theme(text = element_text(size=14))
+  xlab("Migration rate / sequence length") +
+  ylab("Coverage") +
+  theme(text = element_text(size=20))
 
 
 # Precision ----
 
-precision <- stats[,c(1:7)]
-precision["group"] <- paste(precision$total_reps,
-                                 precision$tips,
-                                 precision$seqlen,
-                                 precision$mig_rate,
-                                 precision$tree_data, sep = "_")
+precision <- stats[,c(1:5)]
+precision["group"] <- paste(precision$tips,
+                            precision$seqlen,
+                            precision$mig_rate,
+                            precision$tree_data, sep = "_")
 precision_quantiles <- precision %>%
   group_by(group) %>%
-  summarize(lower1 = quantile(prec1, probs = 0.025),
-            median1 = quantile(prec1, probs = 0.5),
-            upper1 = quantile(prec1, probs = 0.975),
-            lower2 = quantile(prec2, probs = 0.025),
-            median2 = quantile(prec2, probs = 0.5),
-            upper2 = quantile(prec2, probs = 0.975))
+  summarize(lower = quantile(prec, probs = 0.025),
+            median = quantile(prec, probs = 0.5),
+            upper = quantile(prec, probs = 0.975))
 
 
-precision_quantiles["seqlen"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][3]))
+precision_quantiles["seqlen"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][2]))
 
-precision_quantiles["tree_data"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][5]))
+precision_quantiles["tree_data"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][4]))
 precision_quantiles$tree_data[precision_quantiles$tree_data == "all"] <- "all_tree"
 
-precision_quantiles["mig_rate"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][4]))
-
+precision_quantiles["mig_rate"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][3]))
+precision_quantiles["migration_seqlen"] <- paste(precision_quantiles$mig_rate,
+                                                 precision_quantiles$seqlen,
+                                                 sep = "/")
 
 
 quartz()
-ggplot(precision_quantiles, aes(x = mig_rate)) +
-  geom_point(aes(y = median1, colour ="run1"), size = 1) +
-  geom_errorbar(aes(ymax = upper1, ymin = lower1, width = 0.1, colour ="run1")) +
-  geom_point(aes(y = median2, colour ="run2"), size = 1) +
-  geom_errorbar(aes(ymax = upper2, ymin = lower2, width = 0.1, colour ="run2")) +
-  facet_wrap( tree_data ~ seqlen, ncol = 2) +
+ggplot(precision_quantiles, aes(x = migration_seqlen)) +
+  geom_point(aes(y = median, colour = tree_data), size = 4, position = position_dodge(width =0.7)) +
+  geom_errorbar(aes(ymax = upper, ymin = lower, width = 0.5, colour =tree_data), position = position_dodge(width =0.7)) +
   geom_hline(yintercept=0, linetype="dotted") +
   theme_bw() +
+  scale_x_discrete(guide = guide_axis(angle = -15)) +
   ggtitle("Precision: region 1000; global 100") +
-  xlab("Migration rate") +
-  theme(text = element_text(size=14))
+  xlab("Migration rate / sequence length") +
+  ylab("Precision") +
+  theme(text = element_text(size=20))
 
 
 
 # Relative error ----
 
-relative_error <- stats[,c(1:5,10:11)]
-relative_error["group"] <- paste(relative_error$total_reps,
-                                 relative_error$tips,
+relative_error <- stats[,c(1:4,7:8)]
+relative_error["group"] <- paste(relative_error$tips,
                                  relative_error$seqlen,
                                  relative_error$mig_rate,
                                  relative_error$tree_data, sep = "_")
 relative_error_quantiles <- relative_error %>%
   group_by(group) %>%
-  summarize(lower1 = quantile(mean_relative_error1, probs = 0.025),
-            median1 = quantile(mean_relative_error1, probs = 0.5),
-            upper1 = quantile(mean_relative_error1, probs = 0.975),
-            lower2 = quantile(mean_relative_error2, probs = 0.025),
-            median2 = quantile(mean_relative_error2, probs = 0.5),
-            upper2 = quantile(mean_relative_error2, probs = 0.975))
+  summarize(lower = quantile(relative_error, probs = 0.025),
+            median = quantile(relative_error, probs = 0.5),
+            upper = quantile(relative_error, probs = 0.975))
 
 
-relative_error_quantiles["seqlen"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][3]))
+relative_error_quantiles["seqlen"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][2]))
 
-relative_error_quantiles["tree_data"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][5]))
+relative_error_quantiles["tree_data"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][4]))
 relative_error_quantiles$tree_data[relative_error_quantiles$tree_data == "all"] <- "all_tree"
 
-relative_error_quantiles["mig_rate"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][4]))
+relative_error_quantiles["mig_rate"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][3]))
+relative_error_quantiles["migration_seqlen"] <- paste(relative_error_quantiles$mig_rate,
+                                                      relative_error_quantiles$seqlen,
+                                                      sep = "/")
 
 
 quartz()
-ggplot(relative_error_quantiles, aes(x = mig_rate)) +
-  geom_point(aes(y = median1, colour = "run1"), size = 1) +
-  geom_errorbar(aes(ymax = upper1, ymin = lower1, colour = "run1", width = 0.1)) +
-  geom_point(aes(y = median2, colour = "run2"), size = 1) +
-  geom_errorbar(aes(ymax = upper2, ymin = lower2, colour = "run2", width = 0.1)) +
-  facet_wrap( tree_data ~ seqlen, ncol = 2) +
+ggplot(relative_error_quantiles, aes(x = migration_seqlen)) +
+  geom_point(aes(y = median, colour = tree_data), size = 4, position = position_dodge(width =0.7)) +
+  geom_errorbar(aes(ymax = upper, ymin = lower, width = 0.5, colour =tree_data), position = position_dodge(width =0.7)) +
   geom_hline(yintercept=0, linetype="dotted") +
   theme_bw() +
-  ggtitle("Relative Error: region 1000; global 100") +
-  xlab("Migration rate") +
-  theme(text = element_text(size=14))
+  scale_x_discrete(guide = guide_axis(angle = -15)) +
+  ggtitle("Relative error: region 1000; global 100") +
+  xlab("Migration rate / sequence length") +
+  ylab("Relative error") +
+  theme(text = element_text(size=20))

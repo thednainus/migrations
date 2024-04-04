@@ -45,8 +45,14 @@
         <!-- <prior id="YuleBirthRatePrior.t:model0_ali" name="distribution" x="@birthRate.t:model0_ali">
                     <Uniform id="Uniform.1" name="distr" upper="Infinity"/>
                 </prior> -->
-        <prior id="ClockPrior.c:model0_ali" name="distribution" x="@clockRate.c:model0_ali">
+        <!-- <prior id="ClockPrior.c:model0_ali" name="distribution" x="@clockRate.c:model0_ali">
           <Uniform id="Uniform.0" name="distr" upper="Infinity"/>
+        </prior> -->
+        <prior id="ClockPrior.c:model0_ali" name="distribution" x="@clockRate.c:model0_ali">
+          <LogNormal id="LogNormalDistributionclockModel.0" name="distr">
+            <parameter id="RealParameter.clock1" spec="parameter.RealParameter" estimate="false" name="M">-6.214608</parameter>
+            <parameter id="RealParameter.clock2" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
+          </LogNormal>
         </prior>
         <prior id="KappaPrior.s:model0_ali" name="distribution" x="@kappa.s:model0_ali">
           <LogNormal id="LogNormalDistributionModel.0" name="distr">
@@ -225,13 +231,13 @@
       <log id="TreeWithMetaDataLogger.t:model0_ali" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:model0_ali"/>
     </logger>
     <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
-    <operator id="phydyn.a.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a" windowSize="1e-05" weight="2" useGaussian="true"/>
-    <operator id="phydyn.b.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b" windowSize="0.005" weight="2" useGaussian="true"/>
-    <operator id="phydyn.b1.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1" windowSize="0.1" weight="15" useGaussian="true"/>
+    <operator id="phydyn.a.operator" spec="RealRandomWalkOperator" parameter="@phydyn.a" windowSize="1e-05" weight="1.5" useGaussian="true"/>
+    <operator id="phydyn.b.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b" windowSize="0.005" weight="1.5" useGaussian="true"/>
+    <operator id="phydyn.b1.operator" spec="RealRandomWalkOperator" parameter="@phydyn.b1" windowSize="0.1" weight="30" useGaussian="true"/>
     <operator id="phydyn.dlogbeta.operator" spec="RealRandomWalkOperator" parameter="@phydyn.dlogbeta" windowSize="1" weight="1" useGaussian="true"/>
     <operator id="phydyn.srcMigrationRate.operator" spec="RealRandomWalkOperator" parameter="@phydyn.srcMigrationRate" windowSize="0.01" weight="2" useGaussian="true"/>
     <operator id="phydyn.I.operator" spec="RealRandomWalkOperator" parameter="@phydyn.I" windowSize="0.1" weight="5" useGaussian="true"/>
-    <operator id="phydyn.src.operator" spec="RealRandomWalkOperator" parameter="@phydyn.src" windowSize="1000" weight="35" useGaussian="true"/>
+    <operator id="phydyn.src.operator" spec="RealRandomWalkOperator" parameter="@phydyn.src" windowSize="1000" weight="30" useGaussian="true"/>
     <logger id="popTrajLog" spec="Logger" fileName="trajectory.tsv" logEvery="2000">
       <log id="trajectoryLogger" spec="phydyn.loggers.TrajectoryLogger" pointFrequency="1" logrates="all" popModel="@PhyDynPopModel"/>
     </logger>

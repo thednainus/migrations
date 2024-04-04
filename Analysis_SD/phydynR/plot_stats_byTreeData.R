@@ -7,23 +7,23 @@ library(stringr)
 #get the data
 
 #low migration rate
-low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.0333333333333333_1000bp_stats.RDS")
-low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.0333333333333333_1000bp_stats.RDS")
-low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.0333333333333333_10000bp_stats.RDS")
-low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.0333333333333333_10000bp_stats.RDS")
+low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.0333333333333333_1000bp_stats.RDS")
+low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.0333333333333333_1000bp_stats.RDS")
+low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.0333333333333333_10000bp_stats.RDS")
+low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.0333333333333333_10000bp_stats.RDS")
 
 
 #medium migration rate
-medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.1_1000bp_stats.RDS")
-medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.1_1000bp_stats.RDS")
-medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.1_10000bp_stats.RDS")
-medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.1_10000bp_stats.RDS")
+medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.1_1000bp_stats.RDS")
+medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.1_1000bp_stats.RDS")
+medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.1_10000bp_stats.RDS")
+medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.1_10000bp_stats.RDS")
 
 #high migration rate
-high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.333333333333333_1000bp_stats.RDS")
-high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.333333333333333_1000bp_stats.RDS")
-high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_all_tree_0.333333333333333_10000bp_stats.RDS")
-high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global500_mh1990_0.333333333333333_10000bp_stats.RDS")
+high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.333333333333333_1000bp_stats.RDS")
+high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.333333333333333_1000bp_stats.RDS")
+high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_all_tree_0.333333333333333_10000bp_stats.RDS")
+high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/stats/region1000global100_mh1990_0.333333333333333_10000bp_stats.RDS")
 
 
 
@@ -51,7 +51,7 @@ ggplot(coverage, aes(x = mig_rate, y = coverage1)) +
   geom_hline(yintercept=1, linetype="dotted") +
   facet_wrap(  ~ seqlen, ncol = 2) +
   theme_bw() +
-  ggtitle("Coverage: region 1000; global 500") +
+  ggtitle("Coverage: region 1000; global 100") +
   xlab("Migration rate") +
   theme(text = element_text(size=14))
 
