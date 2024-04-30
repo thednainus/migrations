@@ -60,6 +60,12 @@
             <parameter id="RealParameter.2" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
           </LogNormal>
         </prior>
+        <distribution id="allseqs.prior" spec="beast.base.evolution.tree.MRCAPrior" tree="@Tree.t:model0_ali">
+            <taxonset id="allseqs" spec="TaxonSet">
+                TAXONSET
+            </taxonset>
+            <Uniform id="Uniform.3" lower="1979.0" name="distr" upper="1981.0"/>
+        </distribution>
         <distribution id="PhyDynModelLikelihood" spec="phydyn.distribution.STreeLikelihoodODE" equations="QL" minP="0.001" penaltyAgtY="0" useStateName="true">
           <popmodel id="PhyDynPopModel" spec="phydyn.model.PopModelODE">
             <popParams id="initValues" spec="phydyn.model.TrajectoryParameters" integrationSteps="100">
@@ -199,6 +205,7 @@
       <!-- <log idref="birthRate.t:model0_ali"/> -->
       <log idref="clockRate.c:model0_ali"/>
       <log idref="kappa.s:model0_ali"/>
+      <log idref="allseqs.prior"/>
       <log idref="phydyn.a"/>
       <log idref="phydyn.b"/>
       <log idref="phydyn.b1"/>

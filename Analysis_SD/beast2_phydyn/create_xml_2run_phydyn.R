@@ -18,3 +18,4 @@ xmlfn <- system.file("xml_template/discrete_phylogeography_TEMPLATE.xml", packag
 
 #save xml file to disk
 format_xml_beast1(xmlfn, fastafn)
+format_xml_phydyn(xmlfn, fastafn)

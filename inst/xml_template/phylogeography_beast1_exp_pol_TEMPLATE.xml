@@ -231,13 +231,13 @@ SEQUENCES
 
 	<!-- Define operators                                                        -->
 	<operators id="operators" optimizationSchedule="log">
-		<scaleOperator scaleFactor="0.75" weight="1">
+		<scaleOperator scaleFactor="0.75" weight="0.1">
 			<parameter idref="kappa"/>
 		</scaleOperator>
-		<scaleOperator scaleFactor="0.75" weight="3">
+		<scaleOperator scaleFactor="0.75" weight="10">
 			<parameter idref="default.clock.rate"/>
 		</scaleOperator>
-		<upDownOperator scaleFactor="0.75" weight="3">
+		<upDownOperator scaleFactor="0.75" weight="10">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
@@ -245,10 +245,10 @@ SEQUENCES
 				<parameter idref="default.clock.rate"/>
 			</down>
 		</upDownOperator>
-		<scaleOperator scaleFactor="0.75" weight="3">
+		<scaleOperator scaleFactor="0.75" weight="5">
 			<parameter idref="location.clock.rate"/>
 		</scaleOperator>
-		<upDownOperator scaleFactor="0.75" weight="3">
+		<upDownOperator scaleFactor="0.75" weight="5">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
@@ -268,25 +268,25 @@ SEQUENCES
 		<wilsonBalding weight="3">
 			<treeModel idref="treeModel"/>
 		</wilsonBalding>
-		<scaleOperator scaleFactor="0.75" weight="3">
+		<scaleOperator scaleFactor="0.75" weight="5">
 			<parameter idref="treeModel.rootHeight"/>
 		</scaleOperator>
 		<uniformOperator weight="30">
 			<parameter idref="treeModel.internalNodeHeights"/>
 		</uniformOperator>
-		<scaleOperator scaleFactor="0.75" weight="3">
+		<scaleOperator scaleFactor="0.75" weight="0.5">
 			<parameter idref="exponential.popSize"/>
 		</scaleOperator>
-		<randomWalkOperator windowSize="1.0" weight="3">
+		<randomWalkOperator windowSize="1.0" weight="0.5">
 			<parameter idref="exponential.growthRate"/>
 		</randomWalkOperator>
-		<scaleOperator scaleFactor="0.75" weight="15" scaleAllIndependently="true">
+		<scaleOperator scaleFactor="0.75" weight="7" scaleAllIndependently="true">
 			<parameter idref="location.rates"/>
 		</scaleOperator>
 		<bitFlipOperator weight="7">
 			<parameter idref="location.indicators"/>
 		</bitFlipOperator>
-		<deltaExchange delta="0.75" weight="1">
+		<deltaExchange delta="0.75" weight="3">
 			<parameter idref="location.root.frequencies"/>
 		</deltaExchange>
 	</operators>

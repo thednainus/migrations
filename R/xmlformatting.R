@@ -7,14 +7,28 @@
 
 #function to add the sequence node to the xml beast2 file
 .seq_format <- function( d ){
-  y = '<sequence id="NAME" spec="Sequence" taxon="NAME" totalcount="4" value="SEQUENCE"/>'
+  y = '<sequence id="NAME1" spec="Sequence" taxon="NAME2" totalcount="4" value="SEQUENCE"/>'
+  seqnames <- unlist(lapply(rownames(d), function(x) .add_deme(x)))
+  rownames(d) <- seqnames
+  seqd = lapply(  seqnames , function(sid){
+    sid1 = paste("seq", sid, sep = ".")
+    y1 = gsub( pattern = 'NAME1', replace=sid1, y )
+    y2 = gsub( pattern = 'NAME2', replace=sid, y1 )
+    seq = paste( collapse='', as.character( d[sid, ] )[1,]  )
+    y3 = gsub( pattern ='SEQUENCE', replace= seq, y2 )
+    y3
+  })
+  paste( seqd, collapse = '\n' )
+}
+
+#function to add taxon set to the xml beast2 file to add prior to the tree height
+.taxon_format <- function( d ){
+  y = '<taxon id="NAME" spec="Taxon"/>'
   seqnames <- unlist(lapply(rownames(d), function(x) .add_deme(x)))
   rownames(d) <- seqnames
   seqd = lapply(  seqnames , function(sid){
     y1 = gsub( pattern = 'NAME', replace=sid, y )
-    seq = paste( collapse='', as.character( d[sid, ] )[1,]  )
-    y2 = gsub( pattern ='SEQUENCE', replace= seq, y1 )
-    y2
+    y1
   })
   paste( seqd, collapse = '\n' )
 }
@@ -120,6 +134,7 @@ format_xml_phydyn <- function(xmlfn , fastafn){
   #~ 	Attributes to overwrite:
   #~ SEQUENCES
   #~ DATE_TRAIT
+  #~ TAXONSET
 
   d = read.dna( fastafn, format = 'fasta' )
   seqdata = .seq_format( d )
@@ -131,15 +146,19 @@ format_xml_phydyn <- function(xmlfn , fastafn){
   names(sts) <- sids
   datedata = .date_trait( sts )
 
+  #get tason set
+  taxonset <- .taxon_format(d)
+
   x = readLines( xmlfn )
   xmlofn = gsub(xmlfn, pattern = "_TEMPLATE", replacement = "")
 
   xk1 = gsub(x, pattern = "DATE_TRAIT", replacement = datedata)
   xk2 = gsub(xk1, pattern = "SEQUENCES", replacement = seqdata)
+  xk3 = gsub(xk2, pattern = "TAXONSET", replacement = taxonset)
 
   filename <- tail(str_split(xmlofn, "/")[[1]], n = 1)
-  writeLines(xk2, con = filename)
-  invisible(xk2)
+  writeLines(xk3, con = filename)
+  invisible(xk3)
 
 }
 
