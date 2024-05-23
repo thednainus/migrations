@@ -74,7 +74,7 @@
               <initialValue id="initialValue.phydyn.Tr" spec="phydyn.model.ParamValue" pname="Tr">
                 <parameter id="phydyn.Tr" spec="parameter.RealParameter" estimate="false" name="pvalue" lower="0.0">0</parameter>
               </initialValue>
-              <parameter id="phydyn.t0" spec="parameter.RealParameter" name="t0" estimate="false">1977</parameter>
+              <parameter id="phydyn.t0" spec="parameter.RealParameter" name="t0" estimate="false">1979</parameter>
             </popParams>
             <modelParams id="rates" spec="phydyn.model.ModelParameters">
               <param id="modelParams.phydyn.a" spec="phydyn.model.ParamValue" pname="a" pvalue="@phydyn.a"/>
