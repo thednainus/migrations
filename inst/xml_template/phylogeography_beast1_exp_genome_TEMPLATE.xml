@@ -234,10 +234,10 @@ SEQUENCES
 		<scaleOperator scaleFactor="0.75" weight="0.1">
 			<parameter idref="kappa"/>
 		</scaleOperator>
-		<scaleOperator scaleFactor="0.75" weight="10">
+		<scaleOperator scaleFactor="0.75" weight="5">
 			<parameter idref="default.clock.rate"/>
 		</scaleOperator>
-		<upDownOperator scaleFactor="0.75" weight="10">
+		<upDownOperator scaleFactor="0.75" weight="15">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
@@ -248,7 +248,7 @@ SEQUENCES
 		<scaleOperator scaleFactor="0.75" weight="5">
 			<parameter idref="location.clock.rate"/>
 		</scaleOperator>
-		<upDownOperator scaleFactor="0.75" weight="5">
+		<upDownOperator scaleFactor="0.75" weight="20">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
@@ -262,10 +262,10 @@ SEQUENCES
 		<narrowExchange weight="30">
 			<treeModel idref="treeModel"/>
 		</narrowExchange>
-		<wideExchange weight="3">
+		<wideExchange weight="15">
 			<treeModel idref="treeModel"/>
 		</wideExchange>
-		<wilsonBalding weight="3">
+		<wilsonBalding weight="15">
 			<treeModel idref="treeModel"/>
 		</wilsonBalding>
 		<scaleOperator scaleFactor="0.75" weight="5">
