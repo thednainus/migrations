@@ -8,8 +8,8 @@ Software <- "/Applications/BEAST_1.10.4/bin/logcombiner"
 # for the partial pol gene ----
 
 # Obtain an example log file its name
-filenames <- list.files(path = "~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/high/region100global100",
-                        all.files = TRUE, pattern = "phylogeography_beast1.log",
+filenames <- list.files(path = "~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/medium/region100global100",
+                        all.files = TRUE, pattern = "phylogeography_beast1.location.rates.log",
                         full.names = TRUE, recursive = TRUE)
 
 run1 <- filenames[grepl("run1/results/", filenames)]
@@ -63,7 +63,7 @@ for(i in 1:50){
 
     if(ali_run1 == "results"){
       #use logcombiner to combine logs from the same replicate
-      output_name <- paste(output_location1, "combined_runs123456.log", sep = "/")
+      output_name <- paste(output_location1, "combined_location_runs123456.log", sep = "/")
       args_run123 <- c("-burnin 20000000",
                         run1[i],
                         run2[i],

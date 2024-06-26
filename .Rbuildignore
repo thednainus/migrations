@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+Analysis/
+Analysis_SD/
+BASTA_example/
+CI_migrationRates_results/
+phydynbeast_test/
+data/
