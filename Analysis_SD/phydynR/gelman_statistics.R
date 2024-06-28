@@ -6,8 +6,8 @@ library(stringr)
 #get the data that was completed i = 800 iterations
 
 #list the name of files with results
-mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region1000global500/all_tree/run1/results", recursive = TRUE, full.names = TRUE)
-mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region1000global500/all_tree/run2/results", recursive = TRUE, full.names = TRUE)
+mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region100global100/mh1990/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/medium/region100global100/mh1990/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 mcmc_results_iter.data1 <- mcmc_results1[grepl("iter.rdata", mcmc_results1)]
 length(mcmc_results_iter.data1)
@@ -42,6 +42,15 @@ for(j in 1:length(mcmc_results_iter.data1)){
     #print(i)
     i2 <- i
 
+    if(i1 != i2){
+
+      print(j)
+      print(i1)
+      print(i2)
+      print("most likely it will need to run for longer")
+
+    }
+
     #then it will
     if(i1 == i2 & i1 == 801){
 
@@ -73,11 +82,47 @@ for(j in 1:length(mcmc_results_iter.data1)){
 
       #}
 
+      ESS1 <- coda::effectiveSize(out_sample1)
+      ESS2 <- coda::effectiveSize(out_sample2)
+
+      if(any(ESS1 < 200) | any(ESS2 < 200)){
+
+        print(j)
+        print("low ESS")
+
+      }
+
+
       if(convergence_res$psrf[3,2] >= 1.10){
 
         print(j)
+        print(convergence_res)
+
+        if(any(ESS1 < 200) | any(ESS2 < 200)){
+
+          print(j)
+          print("low ESS and gelman stats >= 1.1")
+
+        }
+        if(all(ESS1 > 200) & all(ESS2 > 200)){
+
+          print(j)
+          print("high ESS and gelman stats >= 1.1")
+
+        }
+
+
+      }else{
+
+        if(all(ESS1 > 200) & all(ESS2 > 200)){
+
+          print(j)
+          print("good ESS and gelman stats < 1.1")
+
+        }
 
       }
+
 
 
 
@@ -86,17 +131,13 @@ for(j in 1:length(mcmc_results_iter.data1)){
       #marginalPlot(out, names = c(ESTNAMES, ELOWER, EUPPER), start = 7500)
 
       #get ESS values
+      #print(j)
       #print(ESS1 <- coda::effectiveSize(out_sample1))
       #print(ESS2 <- coda::effectiveSize(out_sample2))
 
     }
   } else (print("run1 different from run2: double check data!"))
 }
-
-
-
-
-
 
 
 

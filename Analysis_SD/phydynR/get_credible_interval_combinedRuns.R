@@ -9,25 +9,25 @@ library(ggplot2)
 
 #list the name of files with results
 #run1
-mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region1000global500/all_tree/run1/results", recursive = TRUE, full.names = TRUE)
+mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/high/region100global100/mh1990/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
 #run2
-mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region1000global500/all_tree/run2/results", recursive = TRUE, full.names = TRUE)
+mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/high/region100global100/mh1990/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 #run1
 mcmc_results_iter.data1 <- mcmc_results1[grepl("iter.rdata", mcmc_results1)]
-mcmc_results_iter.data1 <- mcmc_results_iter.data1[-c(14,15,19,23,27,38,40,42,43,45,49,16,4,9,18)]
+mcmc_results_iter.data1 <- mcmc_results_iter.data1[-c(15)]
 length(mcmc_results_iter.data1)
 mcmc_results_out1 <- mcmc_results1[grepl("out_sim.RDS", mcmc_results1)]
-mcmc_results_out1 <- mcmc_results_out1[-c(14,15,19,23,27,38,40,42,43,45,49,16,4,9,18)]
+mcmc_results_out1 <- mcmc_results_out1[-c(15)]
 length(mcmc_results_out1)
 
 #run2
 mcmc_results_iter.data2 <- mcmc_results2[grepl("iter.rdata", mcmc_results2)]
-mcmc_results_iter.data2 <- mcmc_results_iter.data2[-c(14,15,19,23,27,38,40,42,43,45,49,16,4,9,18)]
+mcmc_results_iter.data2 <- mcmc_results_iter.data2[-c(15)]
 length(mcmc_results_iter.data2)
 
 mcmc_results_out2 <- mcmc_results2[grepl("out_sim.RDS", mcmc_results2)]
-mcmc_results_out2 <- mcmc_results_out2[-c(14,15,19,23,27,38,40,42,43,45,49,16,4,9,18)]
+mcmc_results_out2 <- mcmc_results_out2[-c(15)]
 length(mcmc_results_out2)
 
 

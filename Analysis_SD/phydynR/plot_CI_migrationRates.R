@@ -2,7 +2,8 @@
 library(ggplot2)
 
 #get all files with the data
-data_files <- list.files("CI_migrationRates_results", full.names = TRUE)
+#data_files <- list.files("CI_migrationRates_results", full.names = TRUE)
+data_files <- list.files("Analysis_SD/phydynR/mcmc_results/summary/credible_intervals/combined_runs", full.names = TRUE)
 
 #merge data in each file
 CIs <- tibble()
