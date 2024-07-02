@@ -9,13 +9,16 @@ filenames <- list.files(path = "~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST
                         all.files = TRUE, pattern = "beast_phydyn_strictClock.log",
                         full.names = TRUE, recursive = TRUE)
 
-run1 <- filenames[grepl("run1", filenames)]
-run2 <- filenames[grepl("run2", filenames)]
+run1 <- filenames[grepl("run1/results/", filenames)]
+run1.numbers <- unlist(lapply(run1, function(x) str_split(x, "/")[[1]][14]))
+run2 <- filenames[grepl("run2/results/", filenames)]
+run2.numbers <- unlist(lapply(run2, function(x) str_split(x, "/")[[1]][14]))
+
 
 
 #merge logs
 
-for(i in 1:100){
+for(i in 1:length(run1)){
 
   texts1 <- str_split(run1[i], "/")
   texts2 <- str_split(run2[i], "/")
@@ -41,7 +44,7 @@ for(i in 1:100){
       output_name <- paste(output_location1, "combined_runs12.log", sep = "/")
       args_run12 <- c(paste("-log", run1[i], sep = " "),
                       paste("-log", run2[i], sep = " "),
-                      "-b 50",
+                      "-b 30",
                      paste("-o", output_name, sep = " "))
 
       system2(Software, args_run12)
@@ -51,25 +54,6 @@ for(i in 1:100){
 
 
   }
-
-  output_location2 <- paste(texts3[[1]][1:14], collapse = "/")
-  if((rep_run3 == rep_run4) & (ali_run3 == ali_run4)){
-
-    if(ali_run3 == "results"){
-      #use logcombiner to combine logs from the same replicate
-
-      output_name2 <- paste(output_location2, "combined_runs34.log", sep = "/")
-      args_run34 <- c("-burnin 20000000",
-                      run3[i],
-                      run4[i],
-                      output_name2)
-
-      system2(Software, args_run34)
-
-    }
-
-
-
 
   }
 

@@ -8,7 +8,7 @@ Software <- "/Applications/BEAST_1.10.4/bin/logcombiner"
 # for the partial pol gene ----
 
 # Obtain an example log file its name
-filenames <- list.files(path = "~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/medium/region100global100",
+filenames <- list.files(path = "~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/high/region100global100",
                         all.files = TRUE, pattern = "phylogeography_beast1.location.rates.log",
                         full.names = TRUE, recursive = TRUE)
 
