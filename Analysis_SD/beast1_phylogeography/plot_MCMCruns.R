@@ -28,7 +28,7 @@ mcmc_MCMCcombined$rep <- as.factor(mcmc_MCMCcombined$rep)
 
 #violin plot ----
 quartz()
-ggplot(mcmc_MCMCcombined, aes(x=mig_rate, y=location.rates.src.I, colour = mig_rate )) +
+ggplot(mcmc_MCMCcombined, aes(x=mig_rate, y=location.rates.src.I, colour = rep )) +
   geom_violin(position=position_dodge(), draw_quantiles=c(0.5)) +
   #geom_boxplot(width=0.1, position = position_dodge(width =0.9), color="black") +
   theme_bw() +
