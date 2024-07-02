@@ -6,23 +6,23 @@ library(data.table)
 
 
 #low migration rate
-low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_all_tree_0.03_1000bp_MCMCcombined.RDS")
-low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_mh1990_0.03_1000bp_MCMCcombined.RDS")
-low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_all_tree_0.03_10000bp_MCMCcombined.RDS")
-low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_mh1990_0.03_10000bp_MCMCcombined.RDS")
+low_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_all_tree_0.03_1000bp_MCMCcombined.RDS")
+low_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_mh1990_0.03_1000bp_MCMCcombined.RDS")
+low_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_all_tree_0.03_10000bp_MCMCcombined.RDS")
+low_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_mh1990_0.03_10000bp_MCMCcombined.RDS")
 
 
 #medium migration rate
-medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_all_tree_0.1_1000bp_MCMCcombined.RDS")
-medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_mh1990_0.1_1000bp_MCMCcombined.RDS")
-medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_all_tree_0.1_10000bp_MCMCcombined.RDS")
-medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_mh1990_0.1_10000bp_MCMCcombined.RDS")
+medium_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_all_tree_0.1_1000bp_MCMCcombined.RDS")
+medium_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_mh1990_0.1_1000bp_MCMCcombined.RDS")
+medium_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_all_tree_0.1_10000bp_MCMCcombined.RDS")
+medium_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_mh1990_0.1_10000bp_MCMCcombined.RDS")
 
 #high migration rate
-high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_all_tree_0.33_1000bp_MCMCcombined.RDS")
-high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_mh1990_0.33_1000bp_MCMCcombined.RDS")
-high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_all_tree_0.33_10000bp_MCMCcombined.RDS")
-high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region1000global500_mh1990_0.33_10000bp_MCMCcombined.RDS")
+high_allTree_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_all_tree_0.33_1000bp_MCMCcombined.RDS")
+high_mh1990_1000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_mh1990_0.33_1000bp_MCMCcombined.RDS")
+high_allTree_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_all_tree_0.33_10000bp_MCMCcombined.RDS")
+high_mh1990_10000bp <- readRDS("Analysis_SD/phydynR/mcmc_results/summary/data_for_violoin_plots/2reps_combinedRuns/region300global300_mh1990_0.33_10000bp_MCMCcombined.RDS")
 
 mcmc_MCMCcombined <- rbind(low_allTree_1000bp, low_mh1990_1000bp,
                    low_allTree_10000bp, low_mh1990_10000bp,
@@ -43,7 +43,7 @@ ggplot(mcmc_MCMCcombined, aes(x=mig_rate, y=combined_runs, fill =  tree_data ,co
   #geom_boxplot(width=0.1, position = position_dodge(width =0.9), color="black") +
   theme_bw() +
   geom_hline(yintercept=c(0.03,0.1,0.33), linetype = "dotted") +
-  ggtitle("Coverage: region 1000; global 500") +
+  ggtitle("Coverage: region 300; global 300") +
   xlab("True value of migration rate") +
   ylab("Estimated migration rates") +
   theme(text = element_text(size=14)) +

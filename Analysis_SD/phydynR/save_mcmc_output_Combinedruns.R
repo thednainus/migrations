@@ -11,11 +11,12 @@ library(ggplot2)
 
 #list the name of files with results
 #run1
-mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/high/region1000global500/mh1990/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+mcmc_results1 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region300global300/all_tree/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
 #run2
-mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/high/region1000global500/mh1990/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
+mcmc_results2 <- list.files("Analysis_SD/phydynR/mcmc_results/ICL_cluster/importation_rate/low/region300global300/all_tree/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 #run1
+#4 and 17
 mcmc_results_iter.data1 <- mcmc_results1[grepl("iter.rdata", mcmc_results1)]
 mcmc_results_iter.data1 <- mcmc_results_iter.data1[c(4,17)]
 length(mcmc_results_iter.data1)
