@@ -110,7 +110,7 @@ SEQUENCES
 	<!-- The strict clock (Uniform rates across branches)                        -->
 	<strictClockBranchRates id="default.branchRates">
 		<rate>
-			<parameter id="default.clock.rate" value="0.001" lower="0.0"/>
+			<parameter id="default.clock.rate" value="0.0028" lower="0.0"/>
 		</rate>
 	</strictClockBranchRates>
 
@@ -231,13 +231,13 @@ SEQUENCES
 
 	<!-- Define operators                                                        -->
 	<operators id="operators" optimizationSchedule="log">
-		<scaleOperator scaleFactor="0.75" weight="0.1">
+		<scaleOperator scaleFactor="0.906" weight="0.05">
 			<parameter idref="kappa"/>
 		</scaleOperator>
-		<scaleOperator scaleFactor="0.75" weight="10">
+		<scaleOperator scaleFactor="0.969" weight="15">
 			<parameter idref="default.clock.rate"/>
 		</scaleOperator>
-		<upDownOperator scaleFactor="0.75" weight="10">
+		<upDownOperator scaleFactor="0.995" weight="10">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
@@ -245,10 +245,10 @@ SEQUENCES
 				<parameter idref="default.clock.rate"/>
 			</down>
 		</upDownOperator>
-		<scaleOperator scaleFactor="0.75" weight="5">
+		<scaleOperator scaleFactor="0.632" weight="15">
 			<parameter idref="location.clock.rate"/>
 		</scaleOperator>
-		<upDownOperator scaleFactor="0.75" weight="5">
+		<upDownOperator scaleFactor="0.997" weight="10">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
@@ -256,10 +256,10 @@ SEQUENCES
 				<parameter idref="location.clock.rate"/>
 			</down>
 		</upDownOperator>
-		<subtreeSlide size="1.0" gaussian="true" weight="30">
+		<subtreeSlide size="1.0" gaussian="true" weight="20">
 			<treeModel idref="treeModel"/>
 		</subtreeSlide>
-		<narrowExchange weight="30">
+		<narrowExchange weight="20">
 			<treeModel idref="treeModel"/>
 		</narrowExchange>
 		<wideExchange weight="3">
@@ -268,38 +268,38 @@ SEQUENCES
 		<wilsonBalding weight="3">
 			<treeModel idref="treeModel"/>
 		</wilsonBalding>
-		<scaleOperator scaleFactor="0.75" weight="5">
+		<scaleOperator scaleFactor="0.099" weight="1">
 			<parameter idref="treeModel.rootHeight"/>
 		</scaleOperator>
-		<uniformOperator weight="30">
+		<uniformOperator weight="20">
 			<parameter idref="treeModel.internalNodeHeights"/>
 		</uniformOperator>
-		<scaleOperator scaleFactor="0.75" weight="0.5">
+		<scaleOperator scaleFactor="0.752" weight="0.1">
 			<parameter idref="exponential.popSize"/>
 		</scaleOperator>
-		<randomWalkOperator windowSize="1.0" weight="0.5">
+		<randomWalkOperator windowSize="1.0" weight="0.1">
 			<parameter idref="exponential.growthRate"/>
 		</randomWalkOperator>
-		<scaleOperator scaleFactor="0.75" weight="7" scaleAllIndependently="true">
+		<scaleOperator scaleFactor="0.247" weight="15" scaleAllIndependently="true">
 			<parameter idref="location.rates"/>
 		</scaleOperator>
-		<bitFlipOperator weight="7">
+		<bitFlipOperator weight="15">
 			<parameter idref="location.indicators"/>
 		</bitFlipOperator>
-		<deltaExchange delta="0.75" weight="3">
+		<deltaExchange delta="1.276" weight="10">
 			<parameter idref="location.root.frequencies"/>
 		</deltaExchange>
 	</operators>
 
 
 	<!-- Define MCMC                                                             -->
-	<mcmc id="mcmc" chainLength="200000000" autoOptimize="true" operatorAnalysis="phylogeography_beast1.ops">
+	<mcmc id="mcmc" chainLength="250000000" autoOptimize="true" operatorAnalysis="phylogeography_beast1.ops">
 		<joint id="joint">
 			<prior id="prior">
 				<logNormalPrior mu="1.0" sigma="1.25" offset="0.0">
 					<parameter idref="kappa"/>
 				</logNormalPrior>
-				<logNormalPrior mu="-6.214608" sigma="1.25" offset="0.0">
+				<logNormalPrior mu="-5.878136" sigma="1" offset="0.0">
 					<parameter idref="default.clock.rate"/>
 				</logNormalPrior>
 				<ctmcScalePrior>

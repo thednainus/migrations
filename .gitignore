@@ -2,10 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-mcmc_results/
+MCMC_results/
 older/
-test_ali/
 fitted_data/
-BASTA_example/
-phydynbeast_test/
-BASTA_example/

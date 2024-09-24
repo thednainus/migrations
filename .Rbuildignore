@@ -6,3 +6,6 @@ BASTA_example/
 CI_migrationRates_results/
 phydynbeast_test/
 data/
+test_ali/
+older/
+fitted_data/
