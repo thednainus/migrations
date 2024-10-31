@@ -60,9 +60,7 @@ nonDemeDynamics <- c()
 births['src','src'] <- 'src * parms$srcGrowthRate'
 births['I', 'I'] <- 'I * parms$beta.t(t, parms)'
 
-
 migs['src', 'I'] <- 'I * parms$srcMigrationRate'
-#migs['I', 'src'] <- 'I * parms$m2'
 
 deaths['I'] <- 'I * parms$gamma + I * parms$alpha.t(t, parms)'
 
@@ -90,7 +88,7 @@ dm <- build.demographic.process( births = births,
 #                         t0 = t0t1$t0,
 #                         integrationMethod = 'rk4' , res = 1000)
 
-#s <-  dm(parms,  x0 , t0 = 1980, t1 = 2020, res = 100 )
+s <-  dm(parms,  x0 , t0 = 1980, t1 = 2020, res = 100 )
 #y1 <- tail( s[[5]], 1 )[1,]
 
 

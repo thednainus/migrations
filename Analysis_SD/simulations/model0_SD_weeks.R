@@ -45,7 +45,7 @@ pstarts <- c(
 theta <- c(
   age_assort_factor = 0.5, # power of age difference
   pRiskLevel1 = 0.8, # proportion in low risk group
-  srcMigrationRate = 1/10/365, # per lineage rate of migration to source
+  srcMigrationRate = 1/10/365, # per capita rate of migration to source
   srcGrowthRate = 1/3/365, #
   src0 = 1e3,  # initial source size
   inc_scale = 0.0189, #  based on best fit using LHS
