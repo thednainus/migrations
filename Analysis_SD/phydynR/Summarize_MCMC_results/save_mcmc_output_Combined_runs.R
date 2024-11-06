@@ -12,9 +12,9 @@ library(ggplot2)
 
 #list the name of files with results
 #run1
-MCMC_results1 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/low/region300global300/all_tree/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+MCMC_results1 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/all_tree/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
 #run2
-MCMC_results2 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/low/region300global300/all_tree/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
+MCMC_results2 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/all_tree/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 #run1
 #4 and 17
@@ -58,9 +58,9 @@ for(j in 1:length(MCMC_results_iter.data1)){
     if(mig_rate == "medium"){
       mig_rate <-  0.1
     }else if(mig_rate == "low"){
-      mig_rate <-  0.33
-    }else if(mig_rate == "high"){
       mig_rate <-  0.03
+    }else if(mig_rate == "high"){
+      mig_rate <-  0.33
     }
     tree_data <- texts[[1]][8]
 

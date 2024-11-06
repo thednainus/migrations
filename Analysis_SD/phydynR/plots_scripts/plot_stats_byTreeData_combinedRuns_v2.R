@@ -138,19 +138,17 @@ stats$mig_rate <- as.character(stats$mig_rate)
 stats$mig_rate <- as.factor(stats$mig_rate)
 #stats["migration_seqlen"] <- paste(stats$mig_rate, stats$seqlen, sep = "/")
 stats <- stats[,2:9]
-
+stats$tree_data <- ifelse(stats$tree_data == "all_tree", "Whole trees", "Maximum height: 1990")
+stats$tree_data <- factor(stats$tree_data, levels = c("Whole trees", "Maximum height: 1990"))
+stats$seqlen <- ifelse(stats$seqlen == "1000bp", "pol gene", "whole genome")
 
 #coverage ----
 
 coverage <- stats[,c(1:4,6,8)]
 coverage <- distinct(coverage)
-#coverage_low_m <- melt(coverage_low, id.vars=c("tips",
-#                                           "seqlen",
-#                                           "mig_rate",
-#                                           "tree_data",
-#                                           "migration_seqlen"))
 coverage["percentage"] <- coverage$coverage * 100
 coverage$sample_size <- as.factor(coverage$sample_size )
+
 
 
 #color blind save pallet (http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette)
@@ -163,7 +161,8 @@ ggplot(coverage, aes(x = mig_rate, y = percentage)) +
              aes(colour = sample_size), size = 3) +
   geom_hline(yintercept = 100, linetype="dotted") +
   facet_grid(seqlen ~ tree_data, scales = "free") +
-  scale_colour_manual(values = cbbPalette[c(2:4,8)]) +
+  scale_colour_manual(values = cbbPalette[c(2:4,8)],
+                      name = "Sample size") +
   theme_bw() +
   xlab("Migration rate") +
   ylab("Coverage") +
@@ -196,6 +195,8 @@ precision_quantiles["mig_rate"] <- unlist(lapply(precision_quantiles$group, func
 precision_quantiles["tips"] <- unlist(lapply(precision_quantiles$group, function(x) str_split(x, "_")[[1]][1]))
 precision_quantiles["sample_size"] <- unlist(lapply(precision_quantiles$tips, function(x) sum(as.numeric(str_extract_all(x, "\\d+")[[1]]))))
 precision_quantiles$sample_size <- as.factor(precision_quantiles$sample_size)
+precision_quantiles$tree_data <- factor(precision_quantiles$tree_data,
+                                        levels = c("Whole trees", "Maximum height: 1990"))
 
 
 
@@ -208,8 +209,9 @@ ggplot(precision_quantiles, aes(x = mig_rate)) +
                     width = 0.5, colour = sample_size),
                 position = position_dodge(width = 0.7)) +
   geom_hline(yintercept = 0, linetype="dotted") +
-  facet_grid(seqlen ~ tree_data, scales = "free") +
-  scale_colour_manual(values = cbbPalette[c(2:4,8)]) +
+  facet_grid(seqlen ~ tree_data, scales = "free_y") +
+  scale_colour_manual(values = cbbPalette[c(2:4,8)],
+                      name = "Sample size") +
   theme_bw() +
   xlab("Migration rate") +
   ylab("Precision") +
@@ -243,17 +245,20 @@ relative_error_quantiles["migration_seqlen"] <- paste(relative_error_quantiles$m
 relative_error_quantiles["tips"] <- unlist(lapply(relative_error_quantiles$group, function(x) str_split(x, "_")[[1]][1]))
 relative_error_quantiles["sample_size"] <- unlist(lapply(relative_error_quantiles$tips, function(x) sum(as.numeric(str_extract_all(x, "\\d+")[[1]]))))
 relative_error_quantiles$sample_size <- as.factor(relative_error_quantiles$sample_size)
-
+relative_error_quantiles$tree_data <- factor(relative_error_quantiles$tree_data,
+                                             levels = c("Whole trees", "Maximum height: 1990"))
 
 quartz()
 ggplot(relative_error_quantiles, aes(x = mig_rate)) +
   geom_point(aes(y = median, colour = sample_size), size = 4,
              position = position_dodge(width = 0.7)) +
-  geom_errorbar(aes(ymax = upper, ymin = lower, width = 0.5, colour = sample_size),
+  geom_errorbar(aes(ymax = upper, ymin = lower, width = 0.5,
+                    colour = sample_size),
                 position = position_dodge(width = 0.7)) +
   geom_hline(yintercept = 0, linetype="dotted") +
   facet_grid(seqlen ~ tree_data, scales = "free") +
-  scale_colour_manual(values = cbbPalette[c(2:4,8)]) +
+  scale_colour_manual(values = cbbPalette[c(2:4,8)],
+                      name = "Sample size") +
   theme_bw() +
   xlab("Migration rate") +
   ylab("Relative error") +

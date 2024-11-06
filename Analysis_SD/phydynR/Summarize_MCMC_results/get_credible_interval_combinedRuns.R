@@ -10,25 +10,25 @@ library(ggplot2)
 
 #list the name of files with results
 #run1
-MCMC_results1 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/mh1990/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+MCMC_results1 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/all_tree/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
 #run2
-MCMC_results2 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/mh1990/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
+MCMC_results2 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/all_tree/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 #run1
 MCMC_results_iter.data1 <- MCMC_results1[grepl("iter.rdata", MCMC_results1)]
-MCMC_results_iter.data1 <- MCMC_results_iter.data1[-c(4,19,20,28,33,41,43)]
+MCMC_results_iter.data1 <- MCMC_results_iter.data1[-c(49,8,9,13,18,19,26,42,46,50)]
 length(MCMC_results_iter.data1)
 MCMC_results_out1 <- MCMC_results1[grepl("out_sim.RDS", MCMC_results1)]
-MCMC_results_out1 <- MCMC_results_out1[-c(4,19,20,28,33,41,43)]
+MCMC_results_out1 <- MCMC_results_out1[-c(49,8,9,13,18,19,26,42,46,50)]
 length(MCMC_results_out1)
 
 #run2
 MCMC_results_iter.data2 <- MCMC_results2[grepl("iter.rdata", MCMC_results2)]
-MCMC_results_iter.data2 <- MCMC_results_iter.data2[-c(4,19,20,28,33,41,43)]
+MCMC_results_iter.data2 <- MCMC_results_iter.data2[-c(49,8,9,13,18,19,26,42,46,50)]
 length(MCMC_results_iter.data2)
 
 MCMC_results_out2 <- MCMC_results2[grepl("out_sim.RDS", MCMC_results2)]
-MCMC_results_out2 <- MCMC_results_out2[-c(4,19,20,28,33,41,43)]
+MCMC_results_out2 <- MCMC_results_out2[-c(49,8,9,13,18,19,26,42,46,50)]
 length(MCMC_results_out2)
 
 
@@ -57,9 +57,9 @@ for(j in 1:length(MCMC_results_iter.data1)){
     if(mig_rate == "medium"){
       mig_rate <-  0.1
     }else if(mig_rate == "low"){
-      mig_rate <-  0.33
-    }else if(mig_rate == "high"){
       mig_rate <-  0.03
+    }else if(mig_rate == "high"){
+      mig_rate <-  0.33
     }
     tree_data <- texts[[1]][8]
 
