@@ -8,21 +8,21 @@ library(dplyr)
 #get the data that was completed i = 800 iterations
 
 #list the name of files with results
-MCMC_results1 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/all_tree/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
-MCMC_results2 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region300global300/all_tree/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
+MCMC_results1 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region1000global500/all_tree/run1/results_10000bp", recursive = TRUE, full.names = TRUE)
+MCMC_results2 <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/high/region1000global500/all_tree/run2/results_10000bp", recursive = TRUE, full.names = TRUE)
 
 MCMC_results_iter.data1 <- MCMC_results1[grepl("iter.rdata", MCMC_results1)]
-MCMC_results_iter.data1 <- MCMC_results_iter.data1[-c(49,8,9,13,18,19,26,42,46,50)]
+MCMC_results_iter.data1 <- MCMC_results_iter.data1[-c(15,1,2)]
 length(MCMC_results_iter.data1)
 MCMC_results_out1 <- MCMC_results1[grepl("out_sim.RDS", MCMC_results1)]
-MCMC_results_out1 <- MCMC_results_out1[-c(49,8,9,13,18,19,26,42,46,50)]
+MCMC_results_out1 <- MCMC_results_out1[-c(15,1,2)]
 length(MCMC_results_out1)
 
 MCMC_results_iter.data2 <- MCMC_results2[grepl("iter.rdata", MCMC_results2)]
-MCMC_results_iter.data2 <- MCMC_results_iter.data2[-c(49,8,9,13,18,19,26,42,46,50)]
+MCMC_results_iter.data2 <- MCMC_results_iter.data2[-c(15,1,2)]
 length(MCMC_results_iter.data2)
 MCMC_results_out2 <- MCMC_results2[grepl("out_sim.RDS", MCMC_results2)]
-MCMC_results_out2 <- MCMC_results_out2[-c(49,8,9,13,18,19,26,42,46,50)]
+MCMC_results_out2 <- MCMC_results_out2[-c(15,1,2)]
 length(MCMC_results_out2)
 
 allESS <- tibble()

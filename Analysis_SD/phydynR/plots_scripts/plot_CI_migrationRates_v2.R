@@ -3,24 +3,24 @@ library(ggplot2)
 
 #get all files with the data
 #migration rate = 0.03
-mig0.03allTree_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_all_tree_0.03_1000bp_combined.RDS")
-mig0.03mh1990_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_mh1990_0.03_1000bp_combined.RDS")
-mig0.03allTree_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_all_tree_0.03_10000bp_combined.RDS")
-mig0.03mh1990_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_mh1990_0.03_10000bp_combined.RDS")
+mig0.03allTree_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_all_tree_0.03_1000bp_combined.RDS")
+mig0.03mh1990_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_mh1990_0.03_1000bp_combined.RDS")
+mig0.03allTree_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_all_tree_0.03_10000bp_combined.RDS")
+mig0.03mh1990_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_mh1990_0.03_10000bp_combined.RDS")
 
 
 #migration rate = 0.1
-mig0.1allTree_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_all_tree_0.1_1000bp_combined.RDS")
-mig0.1mh1990_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_mh1990_0.1_1000bp_combined.RDS")
-mig0.1allTree_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_all_tree_0.1_10000bp_combined.RDS")
-mig0.1mh1990_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_mh1990_0.1_10000bp_combined.RDS")
+mig0.1allTree_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_all_tree_0.1_1000bp_combined.RDS")
+mig0.1mh1990_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_mh1990_0.1_1000bp_combined.RDS")
+mig0.1allTree_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_all_tree_0.1_10000bp_combined.RDS")
+mig0.1mh1990_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_mh1990_0.1_10000bp_combined.RDS")
 
 
 #migration rate = 0.33
-mig0.33allTree_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_all_tree_0.33_1000bp_combined.RDS")
-mig0.33mh1990_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_mh1990_0.33_1000bp_combined.RDS")
-mig0.33allTree_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_all_tree_0.33_10000bp_combined.RDS")
-mig0.33mh1990_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region300global300_mh1990_0.33_10000bp_combined.RDS")
+mig0.33allTree_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_all_tree_0.33_1000bp_combined.RDS")
+mig0.33mh1990_1000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_mh1990_0.33_1000bp_combined.RDS")
+mig0.33allTree_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_all_tree_0.33_10000bp_combined.RDS")
+mig0.33mh1990_10000bp <- readRDS("Analysis_SD/phydynR/MCMC_results/summary/credible_intervals/combined_runs/region1000global500_mh1990_0.33_10000bp_combined.RDS")
 
 
 all_data <- rbind(mig0.03mh1990_1000bp, mig0.03allTree_1000bp,
@@ -59,11 +59,11 @@ ggplot(seqlen1000bp, aes(x = replicate, y = median, color = treeData_migRate)) +
                       breaks=c("all_tree_0.03", "mh1990_0.03",
                                "all_tree_0.1", "mh1990_0.1",
                                "all_tree_0.33", "mh1990_0.33"),
-                      labels=c("all tree: 0.03", "mh: 0.03",
-                               "all tree: 0.1", "mh: 0.1",
-                               "all tree: 0.33", "mh: 0.33")) +
+                      labels=c("whole tree: 0.03", "partial tree: 0.03",
+                               "whole tree: 0.1", "partial tree: 0.1",
+                               "whole tree: 0.33", "partial tree: 0.33")) +
   theme_bw() +
-  ggtitle("Sample size: region 300 and global 300") +
+  ggtitle("Sample size: region 1000 and global 500") +
   ylab("Median and 2.5% and 97.5% quantiles") +
   xlab("Replicate number") +
   theme(text = element_text(size = 14), legend.position = "bottom")
@@ -83,11 +83,11 @@ ggplot(seqlen10000bp, aes(x = replicate, y = median, color = treeData_migRate)) 
                       breaks=c("all_tree_0.03", "mh1990_0.03",
                                "all_tree_0.1", "mh1990_0.1",
                                "all_tree_0.33", "mh1990_0.33"),
-                      labels=c("all tree: 0.03", "mh: 0.03",
-                               "all tree: 0.1", "mh: 0.1",
-                               "all tree: 0.33", "mh: 0.33")) +
+                      labels=c("whole tree: 0.03", "partial tree: 0.03",
+                               "whole tree: 0.1", "partial tree: 0.1",
+                               "whole tree: 0.33", "partial tree: 0.33")) +
   theme_bw() +
-  ggtitle("Sample size: region 300 and global 300") +
+  ggtitle("Sample size: region 1000 and global 500") +
   ylab("Median and 2.5% and 97.5% quantiles") +
   xlab("Replicate number") +
   theme(text = element_text(size = 14), legend.position = "bottom")
