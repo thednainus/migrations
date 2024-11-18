@@ -6,8 +6,10 @@ library(stringr)
 # Obtain an example log file its name
 mcmc_results1 <- list.files("~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/low/region100global100/run1",
                    recursive = TRUE, full.names = TRUE)
+#mcmc_results1 <- mcmc_results1[c(12,24)]
 
-mcmc_logs <- mcmc_results1[grepl("combined_runs123456.log", mcmc_results1)]
+mcmc_logs <- mcmc_results1[grepl("combined_runs1234.log", mcmc_results1)]
+mcmc_logs <- mcmc_logs[c(1,48)]
 length(mcmc_logs)
 
 all_CIs <- data.frame()
@@ -58,6 +60,12 @@ for(i in 1:length(mcmc_logs)){
 
 
 }
+
+filename <- paste(all_CIs$tips[1],
+                  all_CIs$migration[1],
+                  all_CIs$seqlen[1], sep = "_")
+filename <- paste(filename, "beast1", "combinedRuns.RDS", sep = "_")
+saveRDS(all_CIs, file = filename)
 
 
 

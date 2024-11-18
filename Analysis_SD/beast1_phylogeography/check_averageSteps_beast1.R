@@ -1,11 +1,11 @@
-#get the average stepes that each run in the MCMC was carried out for
+#get the average steps that each run in the MCMC was carried out for
 library(tracerer)
 library(stringr)
 
 
 
 # Obtain an example log file its name
-mcmc_results1 <- list.files("~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/high/region100global100/run4/results_10000bp",
+mcmc_results1 <- list.files("~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/high/region300global300/run6/results",
                    recursive = TRUE, full.names = TRUE)
 
 
@@ -64,4 +64,3 @@ all_states
 mean(all_states[,6])
 mean(all_states[,7])
 nrow(all_states)
-
