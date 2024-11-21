@@ -12,7 +12,7 @@ library(phydynR)
 library(deSolve)
 library(Rcpp)
 library(HIVepisimAnalysis)
-library(SDBenefits)
+library(migrations)
 
 
 

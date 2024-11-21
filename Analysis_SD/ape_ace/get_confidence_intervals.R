@@ -7,6 +7,8 @@ library(stringr)
 #list ace results
 ace_results <- list.files("Analysis_SD/ape_ace/summary", recursive = TRUE, full.names = TRUE)
 
+ace_results <- ace_results[-1]
+
 
 CI_all <- tibble()
 

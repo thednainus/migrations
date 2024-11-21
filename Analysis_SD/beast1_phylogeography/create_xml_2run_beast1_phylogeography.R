@@ -3,7 +3,7 @@
 
 library(ape)
 library(stringr)
-library(SDBenefits)
+library(migrations)
 
 #get file with sequences in FASTA format
 fastafn <- list.files(path = ".", pattern = "*.fasta")
@@ -11,7 +11,7 @@ fastafn <- list.files(path = ".", pattern = "*.fasta")
 
 
 #load xml TEMPLATE to run beast2 phydyn
-xmlfn <- system.file("xml_template/discrete_phylogeography_TEMPLATE.xml", package="SDBenefits")
+xmlfn <- system.file("xml_template/discrete_phylogeography_TEMPLATE.xml", package="migrations")
 
 #save xml file to disk
 format_xml_beast1(xmlfn, fastafn)

@@ -1,7 +1,7 @@
 library(ape)
 library(phydynR)
 library(BayesianTools)
-library(SDBenefits)
+library(migrations)
 
 
 #load Dated.tree object

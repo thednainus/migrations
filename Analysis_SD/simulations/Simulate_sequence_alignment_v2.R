@@ -44,8 +44,8 @@ system2(command = "cat",
 # simulate sequence alignment of 1000bp-
   #seq_filename1000 <- paste("/Users/sofia/Desktop/Imperial/R_packages/SD_Benefits/Analysis_SD/simulations/alignments_test/", filename_prefix, "_ali_1000bp.fasta", sep = "")
   #seq_filename10000 <- paste("/Users/sofia/Desktop/Imperial/R_packages/SD_Benefits/Analysis_SD/simulations/alignments_test/", filename_prefix, "_ali_10000bp.fasta", sep = "")
-  seq_filename1000 <- paste("/Users/user/Desktop/Imperial/newHIVproject/R_projects/SDBenefits/Analysis_SD/simulations/alignments/", filename_prefix, "_ali_1000bp.fasta", sep = "")
-  seq_filename10000 <- paste("/Users/user/Desktop/Imperial/newHIVproject-01Aug2020/R_projects/SDBenefits/Analysis_SD/simulations/alignments/", filename_prefix, "_ali_10000bp.fasta", sep = "")
+  seq_filename1000 <- paste("/Users/user/Desktop/Imperial/newHIVproject/R_projects/migrations/Analysis_SD/simulations/alignments/", filename_prefix, "_ali_1000bp.fasta", sep = "")
+  seq_filename10000 <- paste("/Users/user/Desktop/Imperial/newHIVproject-01Aug2020/R_projects/migrations/Analysis_SD/simulations/alignments/", filename_prefix, "_ali_10000bp.fasta", sep = "")
 
   # simulate sequence alignment using Seq-Gen
   #Simulate alignments of 1000 bp

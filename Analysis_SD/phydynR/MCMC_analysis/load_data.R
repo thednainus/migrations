@@ -1,7 +1,7 @@
 library(ape)
 library(phydynR)
 library(stringr)
-library(SDBenefits)
+library(migrations)
 library(treedater)
 
 #read treedater tree
