@@ -3,7 +3,7 @@ library(tracerer)
 
 
 # Obtain an example log file its name
-mcmc_results1 <- list.files("~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/low/region100global100/run1",
+mcmc_results1 <- list.files("~/Desktop/Imperial/newHIVproject-01Aug2020/BEAST_analysis/beast1/importation_rate/high/region300global300/run1",
                    recursive = TRUE, full.names = TRUE)
 
 mcmc_logs <- mcmc_results1[grepl("combined_runs123456.log", mcmc_results1)]
