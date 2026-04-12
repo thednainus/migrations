@@ -323,7 +323,7 @@ tr.t <- function(t){
 
 
 ##---- source C ----
-sourceCpp( 'Analysis_SD/model0.cpp' ) # F_matrix and G_matrix fns
+sourceCpp( 'Analysis_SD/fit/model0.cpp' ) # F_matrix and G_matrix fns
 
 dydt <- function(t, y, parms, ... ){
   #browser()

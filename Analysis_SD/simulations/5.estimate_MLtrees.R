@@ -48,9 +48,3 @@ end_time - start_time
 
 iqtree_time <- data.frame(start = start_time, end = end_time)
 saveRDS(iqtree_time, paste(seq_length, "iqtree_time.RDS", sep = "_"))
-
-
-
-
-
-

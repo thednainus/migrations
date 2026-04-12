@@ -6,8 +6,8 @@ library(migrations)
 #source('Analysis_SD/simulations/model0_SD_weeks.R')
 #source('Analysis_SD/simulations/model0_SD_sampleTimes_and_States.R')
 
-source('Analysis_SD/simulations/model0_SD_weeks.R')
-source('Analysis_SD/simulations/model0_SD_sampleTimes_and_States.R')
+source('Analysis_SD/simulations/1.model0_SD_weeks.R')
+source('Analysis_SD/simulations/2.model0_SD_sampleTimes_and_States.R')
 
 
 
