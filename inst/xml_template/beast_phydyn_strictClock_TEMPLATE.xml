@@ -128,7 +128,7 @@
         <prior x="@phydyn.srcMigrationRate" name="distribution" id="phydyn.srcMigrationRate.prior">
           <LogNormal name="distr" id="phydyn.srcMigrationRate.prior.lognormal">
             <parameter name="M" estimate="false" spec="parameter.RealParameter" id="phydyn.srcMigrationRate.prior.lognormal.RealParameter.1">-2.99573227355399</parameter>
-            <parameter name="S" estimate="false" spec="parameter.RealParameter" id="phydyn.srcMigrationRate.prior.lognormal.RealParameter.2">0.25</parameter>
+            <parameter name="S" estimate="false" spec="parameter.RealParameter" id="phydyn.srcMigrationRate.prior.lognormal.RealParameter.2">1.0</parameter>
           </LogNormal>
         </prior>
         <prior x="@phydyn.I" name="distribution" id="phydyn.I.prior">

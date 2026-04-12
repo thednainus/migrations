@@ -2,7 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
 MCMC_results/
 older/
 fitted_data/
 screenshots_traces/
+

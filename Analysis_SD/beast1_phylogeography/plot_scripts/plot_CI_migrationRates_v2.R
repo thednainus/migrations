@@ -12,6 +12,11 @@ high_migs <- readRDS("Analysis_SD/beast1_phylogeography/results_summary/credible
 
 
 all_data <- rbind(low_migs, medium_migs, high_migs)
+all_data$migration[all_data$migration == "low"] <- 0.03
+all_data$migration[all_data$migration == "medium"] <- 0.1
+all_data$migration[all_data$migration == "high"] <- 0.33
+names(all_data)[1] <- "Migration rate"
+
 all_data["treeData_migRate"] <- paste(all_data$tree_data,
                                       all_data$mig_rate,
                                       sep = "_")
@@ -26,7 +31,7 @@ all_data["seqlen_text"] <- ifelse(all_data$seqlen == "1000bp",
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 quartz()
-ggplot(all_data, aes(x = sim, y = median, color = migration)) +
+ggplot(all_data, aes(x = sim, y = median, color = `Migration rate`)) +
   geom_point(size = 1, position= position_dodge(0.8)) +
   geom_errorbar(aes(ymax = upper, ymin = lower),
                 width = 1, position= position_dodge(0.8)) +

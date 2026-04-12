@@ -18,7 +18,9 @@ log_weights_dx_df_all["params"] <- rep(1:nrow(log_weights_dx_df_all))
 newdata <- log_weights_dx_df_all[order(log_weights_dx_df_all$log_weights),]
 
 w =   exp( log_weights_dx_df_all[,5]  - max( log_weights_dx_df_all[,5] ) )
-resample <- sample( as.character( log_weights_dx_df_all[, 'params']  ), prob = w, replace = TRUE )
+
+resample <- sample( as.character( log_weights_dx_df_all[, 'params']  ),
+                    prob = w, replace = TRUE )
 
 unique(resample)
 

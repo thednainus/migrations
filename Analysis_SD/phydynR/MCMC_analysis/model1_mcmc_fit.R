@@ -5,9 +5,9 @@ library(migrations)
 
 
 #load Dated.tree object
-#source("Analysis_SD/phydynR/load_data.R")
+#source("Analysis_SD/phydynR/MCMC_analysis/load_data.R")
 source("load_data.R")
-#source("Analysis_SD/phydynR/model1.2_phydynR.R")
+#source("Analysis_SD/phydynR/MCMC_analysis/model1.2_phydynR.R")
 source("model1.2_phydynR.R")
 
 

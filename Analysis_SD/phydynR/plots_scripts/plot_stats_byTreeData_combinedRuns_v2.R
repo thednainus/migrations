@@ -140,7 +140,7 @@ stats$mig_rate <- as.factor(stats$mig_rate)
 stats <- stats[,2:9]
 stats$tree_data <- ifelse(stats$tree_data == "all_tree", "Whole trees", "Maximum height: 1990")
 stats$tree_data <- factor(stats$tree_data, levels = c("Whole trees", "Maximum height: 1990"))
-stats$seqlen <- ifelse(stats$seqlen == "1000bp", "pol gene", "whole genome")
+stats$seqlen <- ifelse(stats$seqlen == "1000bp", "partial pol gene", "whole genome")
 
 #coverage ----
 
