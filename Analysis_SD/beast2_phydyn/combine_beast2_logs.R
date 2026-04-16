@@ -54,9 +54,6 @@ for(i in 1:length(run1)){
       system2(Software, args_run12)
     }
 
-
-
-
   }
 
 }
