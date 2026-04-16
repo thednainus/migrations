@@ -89,6 +89,3 @@ saveRDS(params3dim_weeks_v4, "inst/data/params3dim_weeks_v4.RDS")
 saveRDS(params3dim_weeks_v5, "inst/data/params3dim_weeks_v5.RDS")
 saveRDS(params3dim_weeks_v6, "inst/data/params3dim_weeks_v6.RDS")
 saveRDS(params3dim_weeks_v7, "inst/data/params3dim_weeks_v7.RDS")
-
-
-

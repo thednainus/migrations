@@ -1,4 +1,4 @@
-# Analysis carried out for individual the combined runs.
+# Analysis carried out for individual combined runs.
 
 # plot coverage, precision and relative error for MCMC analyses
 # for the analyses using the whole tree as maximum height

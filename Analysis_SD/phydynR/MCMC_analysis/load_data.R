@@ -9,8 +9,6 @@ tree <- readRDS("../../Results_Benefits_paper/region1000global500/model0/sim1/tr
 #tree <- readRDS("dated_tree.RDS")
 
 
-
-
 # organize metadata in 2 columns.
 # the first column is the sequence names
 # the second column is the state (I, T and src) of each sequences
@@ -39,5 +37,3 @@ dated.tree_sim <- DatedTree(phylo = tree,
                             sampleStates = sampleStates,
                             minEdgeLength = 0.0001,
                             tol = 1e-6)
-
-
