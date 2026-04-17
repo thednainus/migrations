@@ -42,5 +42,3 @@ ggplot(all_data, aes(x = sim, y = median, color = `Migration rate`)) +
   ylab("Median and 2.5% and 97.5% quantiles") +
   xlab("Replicate number") +
   theme(text = element_text(size = 14), legend.position = "bottom")
-
-
