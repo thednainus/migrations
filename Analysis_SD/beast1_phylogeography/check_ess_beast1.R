@@ -37,7 +37,3 @@ for(i in 1:length(mcmc_logs)){
   ess_index <- which(esses < 200)
   print(esses[ess_index])
 }
-
-
-
-

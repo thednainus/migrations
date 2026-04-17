@@ -11,7 +11,7 @@ fastafn <- list.files(path = ".", pattern = "*.fasta")
 
 
 #load xml TEMPLATE to run beast2 phydyn
-xmlfn <- system.file("xml_template/discrete_phylogeography_genome_TEMPLATE.xml",
+xmlfn <- system.file("xml_template/phylogeography_beast1_exp_genome_TEMPLATE.xml",
                      package="migrations")
 
 #save xml file to disk

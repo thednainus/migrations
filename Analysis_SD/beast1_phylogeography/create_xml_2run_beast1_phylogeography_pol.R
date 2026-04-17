@@ -7,7 +7,7 @@ library(migrations)
 
 #get file with sequences in FASTA format
 fastafn <- list.files(path = ".", pattern = "*.fasta")
-#fastafn <- "test_ali/model0_ali_1000bp.fasta"
+#fastafn <- "test_ali/model0_ali_10000bp.fasta"
 
 
 #load xml TEMPLATE to run beast2 phydyn

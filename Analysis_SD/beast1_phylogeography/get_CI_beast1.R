@@ -42,7 +42,8 @@ for(i in 1:length(mcmc_logs)){
   beast_log <- parse_beast_tracelog_file(mcmc_logs[i])
   names(beast_log)[1] <- "Sample"
 
-  sum_stats <- quantile(beast_log$location.rates.src.I, probs = c(0.025, 0.5, 0.975))
+  sum_stats <- quantile(beast_log$location.rates.src.I,
+                        probs = c(0.025, 0.5, 0.975))
   lower <- unname(sum_stats[1])
   median <- unname(sum_stats[2])
   upper <- unname(sum_stats[3])
@@ -66,7 +67,3 @@ filename <- paste(all_CIs$tips[1],
                   all_CIs$seqlen[1], sep = "_")
 filename <- paste(filename, "beast1", "combinedRuns.RDS", sep = "_")
 saveRDS(all_CIs, file = filename)
-
-
-
-
