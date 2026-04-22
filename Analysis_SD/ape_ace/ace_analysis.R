@@ -3,7 +3,8 @@ library(treedater)
 library(stringr)
 library(dplyr)
 
-trees <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/low/region1000global1000/all_tree/run1", pattern = "dated_tree.RDS", recursive = TRUE,
+trees <- list.files("Analysis_SD/phydynR/MCMC_results/ICL_cluster/importation_rate/low/region1000global1000/all_tree/run1",
+                    pattern = "dated_tree.RDS", recursive = TRUE,
                     full.names = TRUE)
 
 results_all <- tibble()
@@ -40,7 +41,8 @@ for(i in 1:length(trees)){
 
     datedTree <- readRDS(trees[i])
 
-    x <- as.factor(unlist(lapply(datedTree$tip.label, function(x) str_split(x, "_")[[1]][2])))
+    x <- as.factor(unlist(lapply(datedTree$tip.label,
+                                 function(x) str_split(x, "_")[[1]][2])))
     anc <- ace(x, datedTree, type = "discrete", model ="ARD")
 
     results <- tibble(sim_number = sim_number,
@@ -61,6 +63,3 @@ filename <- paste(texts[[1]][6], texts[[1]][7], "ace", sep = "_")
 filename <- paste(filename, ".RDS", sep = "")
 
 saveRDS(results_all, filename)
-
-
-
